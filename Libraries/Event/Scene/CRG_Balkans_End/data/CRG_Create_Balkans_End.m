@@ -8,6 +8,8 @@ function traj_coeff = CRG_Create_Balkans_End
 % If output is requested, provides default trajectory coefficients
 %
 % Copyright 2020-2024 The MathWorks, Inc.
+% Coefficient-only calls must not rewrite the imported centerline.
+if nargout == 0
 file_data = readtable("CRG_Balkans_End_centerline.xlsx");
 if width(file_data)<5
     dist_m(1,1) = 0;
@@ -20,6 +22,7 @@ if width(file_data)<5
     clear dist dist_m
 end
 clear file_data;
+end
 if(nargout == 0)
     road_opts.create_stl_files = true;
     road_opts.create_no_elevation = true;
@@ -40,6 +43,12 @@ if(nargout == 0)
 end
 
 %% Create driver trajectory
+traj_coeff.speed_method = 'ggv'; % 'legacy' restores the coefficient-based method
+traj_coeff.ggv_file = 'GGV_Achilles_20260906_0012.mat'; % MAT file containing GGV_data
+traj_coeff.ggv_utilization = 0.95; % Fraction of the combined acceleration envelope, (0,1]
+% A value of 1 leaves no grip reserve and may make the driver unreliable.
+% GGV mode uses no powertrain limit and caps speed at the GGV coverage limit.
+% diff_*, curv_smooth, lim_smooth, target_shape_smooth and vmin are legacy-only.
 traj_coeff.blend_distance = 10;     % m
 traj_coeff.diff_exp       = 1.25;   % Curvature exponent
 traj_coeff.diff_smooth    = 8;     % Diff smoothing number of points

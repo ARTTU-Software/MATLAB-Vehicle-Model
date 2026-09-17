@@ -51,6 +51,12 @@ end
 for i = 1:length(fieldnames(mdata))
     Instance = Instance_List{i};
     mdata.(Instance).Trajectory = load(mdata.(Instance).Trajectory_LoadFile.Value);
+    if isfield(mdata.(Instance).Trajectory.vx,'GGV')
+        % The saved GGV profile already contains the requested grip reserve.
+        mdata.(Instance).vGain.Value = 1;
+        % This is an off-path recovery speed, not a normal speed floor.
+        mdata.(Instance).vMinTarget.Value = min(4,min(mdata.(Instance).Trajectory.vx.Value));
+    end
 end
 
 maneuver_data.(maneuver_type) = mdata;

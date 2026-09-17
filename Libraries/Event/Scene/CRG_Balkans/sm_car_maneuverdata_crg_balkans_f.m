@@ -27,7 +27,7 @@ for i=1:length(Instance_List)
     mdata.(Instance).vGain.Units           = ''; % m
     mdata.(Instance).vGain.Comments        = 'Scales target speed Trajectory vx'; % m
 
-    mdata.(Instance).xPreview.x.Value      = [1.5 3.8 8.5]; % m
+    mdata.(Instance).xPreview.x.Value      = [1.5 3 5]; % m
     mdata.(Instance).xPreview.x.Units      = 'm'; % m
     mdata.(Instance).xPreview.x.Comments   = ''; % m
 

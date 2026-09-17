@@ -1,4 +1,4 @@
-function [traj_data] = sm_car_trajectory_calc(road_data,traj_coeff)
+function [traj_data,speed_report] = sm_car_trajectory_calc(road_data,traj_coeff)
 % Function to produce driver trajectory.
 %
 %   Speed profile       Target speed at distance along track
@@ -9,11 +9,38 @@ function [traj_data] = sm_car_trajectory_calc(road_data,traj_coeff)
 %   Provided in a structure if an output is requested
 %
 % Trajectory is centerline as defined by CRG file.
-% A custom formula calculates target speed based on track curvature.
+% speed_method='ggv' uses a selected combined GGV acceleration envelope.
+% Missing speed_method (or 'legacy') retains the original heuristic.
+% A second output returns GGV diagnostics; show_plots=false suppresses GGV plots.
 %
 % Copyright 2019-2024 The MathWorks, Inc.
 
 % Basic settings
+speed_report = [];
+useGGV = isfield(traj_coeff,'speed_method') && strcmpi(traj_coeff.speed_method,'ggv');
+if isfield(traj_coeff,'speed_method') && ...
+        ~any(strcmpi(traj_coeff.speed_method,{'ggv','legacy'}))
+    error('sm_car_ggv:InvalidMethod','speed_method must be ggv or legacy.');
+end
+originalFolder = pwd;
+restoreFolder = onCleanup(@() cd(originalFolder));
+if useGGV
+    if traj_coeff.blend_distance<=0
+        error('sm_car_ggv:OpenTrack','GGV mode currently requires a closed trajectory (blend_distance > 0).');
+    end
+    ggvFile = which(traj_coeff.ggv_file);
+    if isempty(ggvFile) && isfile(traj_coeff.ggv_file)
+        [ok,attributes] = fileattrib(traj_coeff.ggv_file);
+        if ok, ggvFile=attributes.Name; end
+    end
+    if isempty(ggvFile)
+        error('sm_car_ggv:MissingFile','Selected GGV file not found: %s',traj_coeff.ggv_file);
+    end
+    ggvLoaded = load(ggvFile,'GGV_data');
+    if ~isfield(ggvLoaded,'GGV_data')
+        error('sm_car_ggv:InvalidData','Selected file must contain GGV_data: %s',ggvFile);
+    end
+end
 road_data = strrep(road_data,' ','_');
 [~,f,~] = fileparts(road_data);
 cd(fileparts(which([f '_dat.mat'])))
@@ -98,6 +125,50 @@ end
 x_dr = x_ctr;
 y_dr = y_ctr;
 z_dr = z_ctr;
+
+if useGGV
+    % Use the actual blended geometry, including its updated arc lengths.
+    % Keep every path sample: decimation can remove corner/braking limits.
+    if traj_coeff.decimation~=1
+        warning('sm_car_ggv:NoDecimation','GGV mode retains all trajectory points; decimation is ignored.');
+    end
+    xyz = [x_dr(:) y_dr(:) z_dr(:)];
+    [ggvSpeed,speed_report] = sm_car_ggv_speed_profile(xyz,ggvLoaded.GGV_data,traj_coeff);
+    speed_report.ggv_file = ggvFile;
+    aYawGGV = unwrap(atan2(circshift(y_dr,-1)-circshift(y_dr,1),...
+        circshift(x_dr,-1)-circshift(x_dr,1)));
+    % The existing driver's wrap uses dist(end) as the period. Include the
+    % closing edge and repeat the first pose/speed at the full lap distance.
+    endYaw = aYawGGV(end)+atan2(sin(aYawGGV(1)-aYawGGV(end)),...
+        cos(aYawGGV(1)-aYawGGV(end)));
+    traj_data.x = struct('Value',[x_dr x_dr(1)],'Units','m','Comments','');
+    traj_data.y = struct('Value',[y_dr y_dr(1)],'Units','m','Comments','');
+    traj_data.z = struct('Value',[z_dr z_dr(1)],'Units','m','Comments','');
+    traj_data.xTrajectory = struct('Value',[speed_report.distance_m' speed_report.lap_length_m],...
+        'Units','m','Comments','Distance along the final blended trajectory');
+    traj_data.vx = struct('Value',[ggvSpeed ggvSpeed(1)]','Units','m/s',...
+        'Comments','GGV grip-limited reference; actual powertrain and driver response may differ.');
+    traj_data.vx.GGV = struct('file',traj_coeff.ggv_file,...
+        'utilization',traj_coeff.ggv_utilization,'lap_time_s',speed_report.lap_time_s);
+    traj_data.aYaw = struct('Value',[aYawGGV endYaw],'Units','rad','Comments','Yaw Angle, non-wrapping');
+    fprintf(['%s: GGV grip-limited lap %.2f s, speed %.2f-%.2f m/s, ' ...
+        'maximum segment utilization %.4f (requested %.4f).\n'],...
+        road_data,speed_report.lap_time_s,min(ggvSpeed),max(ggvSpeed),...
+        speed_report.max_utilization_bound,traj_coeff.ggv_utilization);
+    if speed_report.used_low_speed_extension
+        warning('sm_car_ggv:LowSpeedExtension',...
+            'Below %.3g m/s, holding the lowest measured GGV envelope constant.',...
+            speed_report.ggv_speed_range_mps(1));
+    end
+    if ~isfield(traj_coeff,'show_plots') || traj_coeff.show_plots
+        sm_car_plot_ggv_speed_profile(traj_data,speed_report,ggvLoaded.GGV_data);
+    end
+    if nargout==0
+        save([road_data '_trajectory_default.mat'],'-struct','traj_data');
+        save([road_data '_ggv_report.mat'],'speed_report');
+    end
+    return
+end
 
 %% Plot driver path with track centerline
 fig_handle_name =   'h1_driver_centerline';
@@ -279,4 +350,3 @@ ylabel('Target Yaw Angle (rad)');
 title('Target Yaw Angle Along Trajectory');
 
 linkaxes(simlog_handles,'x');
-
