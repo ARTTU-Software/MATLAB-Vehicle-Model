@@ -1,0 +1,83 @@
+{
+    "name": "mfeval",
+    "version": "4.3.1",
+    "id": "8f7663fb-2424-499c-b927-e2e983731252",
+    "formerNames": [],
+    "displayName": "MFeval",
+    "summary": "Contains the necessary functions to evaluate Magic Formula 5.2,  6.1 and 6.2 models from .tir files",
+    "tags": [],
+    "readme": "README.md",
+    "provider": {
+        "name": "Marco Furlan",
+        "organization": "",
+        "email": "",
+        "url": ""
+    },
+    "folders": [
+        {
+            "path": "MFeval",
+            "languages": [
+                "matlab"
+            ]
+        },
+        {
+            "path": "MFeval/Simulink",
+            "languages": [
+                "matlab"
+            ]
+        },
+        {
+            "path": "doc",
+            "languages": [
+                "matlab"
+            ]
+        },
+        {
+            "path": "doc/examples",
+            "languages": [
+                "matlab"
+            ]
+        },
+        {
+            "path": "doc/examples/html",
+            "languages": [
+                "matlab"
+            ]
+        },
+        {
+            "path": "doc/helpsearch-v3",
+            "languages": [
+                "matlab"
+            ]
+        },
+        {
+            "path": "doc/images",
+            "languages": [
+                "matlab"
+            ]
+        }
+    ],
+    "dependencies": [],
+    "releaseCompatibility": "",
+    "supportedPlatforms": [
+        {
+            "platform": "windows",
+            "architectures": [
+                "any"
+            ]
+        },
+        {
+            "platform": "linux",
+            "architectures": [
+                "any"
+            ]
+        },
+        {
+            "platform": "macos",
+            "architectures": [
+                "any"
+            ]
+        }
+    ],
+    "schemaVersion": "1.2.0"
+}
