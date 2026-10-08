@@ -1,2 +1,0 @@
-MFeval (Magic Formula evaluation) has been created to provide a robust way to evaluate Magic Formul tyre models.  
-The toolbox contains the function with the same name (mfeval.m) used to evaluate tyre property files with the Magic Formula 5.2, 6.1 or 6.2 equations. A tyre property file (.tir) contains the magic formula parameters that define the tyre's force and moment characteristics.
