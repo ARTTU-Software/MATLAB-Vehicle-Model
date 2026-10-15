@@ -1,79 +1,54 @@
-%% Script de Initializare Vehicul - Quarter Car Model
-% Proiect: Suspensie Double Wishbone cu Pushrod
+%% Quarter Car Model 
 clear; clc;
 
-%% 1. Geometrie: Hardpoints (Coordonate [x, y, z])
-% Am setat coordonatele astfel incat bratele sa iasa direct pe axa Y.
-% Sasiul (cubul gri) are latimea de 0.2m, deci fata laterala este la Y = 0.1.
+%% 1. Geometry: Hardpoints (Coordinates [x, y, z] in meters)
+% --- Upper Wishbone (Upper Arm) ---
+Chassis.SuspA1.hp_u_chassis_front = [0.152882, 0.207316, 0.271782]; 
+Chassis.SuspA1.hp_u_chassis_rear  = [-0.180729, 0.225000, 0.250894]; 
+Chassis.SuspA1.hp_upright_u       = [-0.012087, 0.521103, 0.381500]; 
 
-% --- Brat Superior (Upper Arm) ---
-% P1: Prindere pe sasiu (Y=0.1 inseamna lipit de sasiu)
-Chassis.SuspA1.hp_u_chassis_front = [0.2, 0.1, 0.15];  
-% P2: Prindere pe fuzeta (Y=0.4 inseamna un brat de 30cm)
-Chassis.SuspA1.hp_upright_u       = [0.2, 0.4, 0.15];  
+% --- Lower Wishbone (Lower Arm) ---
+Chassis.SuspA1.hp_l_chassis_front = [0.200000, 0.203347, 0.076350];
+Chassis.SuspA1.hp_l_chassis_rear  = [-0.196000, 0.225000, 0.076350];
+Chassis.SuspA1.hp_upright_l       = [0.011982, 0.588501, 0.152500];
 
-% --- Brat Inferior (Lower Arm) ---
-% P1: Prindere pe sasiu (mai jos, la Z = -0.05)
-Chassis.SuspA1.hp_l_chassis_front = [0.2, 0.1, 0.05]; 
-% P2: Prindere pe fuzeta
-Chassis.SuspA1.hp_upright_l       = [0.2, 0.4, 0.05]; 
+Chassis.SuspA1.hp_u_front = Chassis.SuspA1.hp_u_chassis_front;
+Chassis.SuspA1.hp_u_rear  = Chassis.SuspA1.hp_u_chassis_rear;
+Chassis.SuspA1.hp_u_out   = Chassis.SuspA1.hp_upright_u;
+Chassis.SuspA1.hp_l_front = Chassis.SuspA1.hp_l_chassis_front;
+Chassis.SuspA1.hp_l_rear  = Chassis.SuspA1.hp_l_chassis_rear;
+Chassis.SuspA1.hp_l_out   = Chassis.SuspA1.hp_upright_l;
 
-% --- Fuzeta (Upright) ---
-% Dimensiunile pentru piesa verde in Simulink ar trebui sa fie [0.05, 0.05, 0.2]
-Chassis.SuspA1.upright_mass       = 1.5;     % Masa [kg]
+% --- Upright & Wheel Hub ---
+Chassis.SuspA1.wheel_center       = [0.000000, 0.640000, 0.266500];
+Chassis.SuspA1.upright_cg         = [0.016810, 0.582170, 0.281090]; 
 
-% --- Sistem Pushrod & Bellcrank ---
-% Punctul de unde pleaca tija de pe brat (la mijlocul bratului inferior)
-Chassis.SuspA1.hp_pushrod_out     = [0.17, 0.34, 0.05]; 
-% Pivotul balansierului (Bellcrank) pe sasiu
-% Z_rel=0.10 => Z_abs=0.35m (in interiorul sasiului, deasupra centrului)
-% Sasiul are centrul R la Z_world=0.25m (din Transform Chassis [0,0,0.25] din SLX)
-Chassis.SuspA1.hp_bcr_pivot       = [0.18, 0.05, 0.22];
-% Punct prindere Pushrod pe balansier: brat ~0.11m, orientat spre exterior-sus
-% (pushrod-ul vine din exterior-jos de la hp_pushrod_out=[0.17,0.34,-0.05])
-Chassis.SuspA1.hp_bcr_pushrod     = [0.24, 0.08, 0.25];
-% Punct prindere amortizor pe balansier: brat ~0.08m, unghi ~110 grade fata de brat pushrod
-Chassis.SuspA1.hp_bcr_shock       = [0.12, 0.05, 0.27];
-% Capatul de sus al pushrod-ului = punctul de pe balansier
+% --- Pushrod & Bellcrank System ---
+Chassis.SuspA1.hp_pushrod_out     = [0.011607, 0.543330, 0.173935]; 
+Chassis.SuspA1.hp_bcr_pivot       = [0.009900, 0.244890, 0.277836];
+Chassis.SuspA1.hp_bcr_pushrod     = [0.009540, 0.351996, 0.310579];
+Chassis.SuspA1.hp_bcr_shock       = [0.009519, 0.318301, 0.312066];
+Chassis.SuspA1.hp_shock_chassis   = [0.007846, 0.233225, 0.468064];
+
 Chassis.SuspA1.hp_pushrod_in      = Chassis.SuspA1.hp_bcr_pushrod;
 
-%% 2. Calcule Automate pentru Simscape (Norma si Jumatea)
-% Aceste variabile le folosesti in Rigid Transforms la "Offset"
-
-% Braț Superior (V-shape)
-Chassis.SuspA1.hp_u_front = [0.1, 0.1, 0.35]; % x, y, z
-Chassis.SuspA1.hp_u_rear  = [0.3, 0.1, 0.35]; 
-Chassis.SuspA1.hp_u_out   = [0.2, 0.4, 0.35]; 
-
-% Braț Inferior (V-shape)
-Chassis.SuspA1.hp_l_front = [0.05, 0.1, 0.05];
-Chassis.SuspA1.hp_l_rear  = [0.35, 0.1, 0.05];
-Chassis.SuspA1.hp_l_out   = [0.2, 0.4, 0.05];
-
-% Pushrod
-P_in = Chassis.SuspA1.hp_pushrod_in;
-P_out = Chassis.SuspA1.hp_pushrod_out;
-Chassis.SuspA1.pushrod_length = norm(P_out - P_in);
+%% 2. Automatic Calculations for Simscape
+Chassis.SuspA1.pushrod_length = norm(Chassis.SuspA1.hp_pushrod_out - Chassis.SuspA1.hp_pushrod_in);
 Chassis.SuspA1.pushrod_half_length = Chassis.SuspA1.pushrod_length / 2;
 
-%% 3. Proprietati de Masa si Inertie
-Chassis.Body.Mass_Total      = 60;   % Masa sasiu [kg]
-Chassis.SuspA1.wheel_mass    = 12.0; % Masa roata [kg]
-Chassis.SuspA1.bcr_mass      = 0.4;  % Masa Bellcrank [kg]
+%% 3. Mass and Inertia Properties (from Excel)
+Chassis.Body.Mass_Total      = 255.07; 
+Chassis.SuspA1.upright_mass  = 1.0;        
+Chassis.SuspA1.wishbone_u_m  = 0.12;   
+Chassis.SuspA1.wishbone_l_m  = 0.165; 
+Chassis.SuspA1.wheel_mass    = 10.0;  
+Chassis.SuspA1.bcr_mass      = 0.4;    
+Chassis.Body.Inertia_Tensor  = [27, 0, 0; 0, 74, 0; 0, 0, 70]; 
 
-% Matrice de inertie sasiu (exemplu cub)
-Chassis.Body.Inertia_Tensor = [1.2, 0, 0; 0, 1.5, 0; 0, 0, 1.8];
+%% 4. Springs and Dampers (from Excel)
+Chassis.SuspA1.spring_rate   = 10; 
+Chassis.SuspA1.spring_preload= 0.008;   
+Chassis.SuspA1.damping_coeff = 1000;     
+Chassis.SuspA1.free_length   = 0.25;    
 
-%% 4. Arcuri si Amortizoare
-Chassis.SuspA1.spring_rate   = 80000; % [N/m]
-Chassis.SuspA1.damping_coeff = 3500;  % [Ns/m]
-Chassis.SuspA1.free_length   = 0.25;  % [m]
-% hp_shock_chassis: X,Y identice cu hp_bcr_shock=[0.10, 0.05, 0.12]
-% Distanta initiala = 0.22m (arc pre-comprimat 30mm fata de free_length=0.25m)
-% => forta initiala arc = 80000*0.03 = 2400N => roata apasata pe sol
-% dZ = 0.22m => z = 0.12 - 0.22 = -0.10 (Z_abs = -0.10+0.25 = 0.15m, in sasiu)
-Chassis.SuspA1.hp_shock_chassis = [0.12, 0.05, 0.02];
-hp_b = [0, 0, 0];
-hp_f = [0.1, 0.4, 0];
-
-disp('>>> Scriptul init_car a fost incarcat! Geometrie Double Wishbone pregatita.');
+disp('>>> init_car script loaded successfully!');
