@@ -1,54 +1,72 @@
-%% Quarter Car Model 
+%% Quarter Car Model - Initialization Script 
 clear; clc;
 
-%% 1. Geometry: Hardpoints (Coordinates [x, y, z] in meters)
-% --- Upper Wishbone (Upper Arm) ---
-Chassis.SuspA1.hp_u_chassis_front = [0.152882, 0.207316, 0.271782]; 
-Chassis.SuspA1.hp_u_chassis_rear  = [-0.180729, 0.225000, 0.250894]; 
-Chassis.SuspA1.hp_upright_u       = [-0.012087, 0.521103, 0.381500]; 
 
-% --- Lower Wishbone (Lower Arm) ---
-Chassis.SuspA1.hp_l_chassis_front = [0.200000, 0.203347, 0.076350];
-Chassis.SuspA1.hp_l_chassis_rear  = [-0.196000, 0.225000, 0.076350];
-Chassis.SuspA1.hp_upright_l       = [0.011982, 0.588501, 0.152500];
+excel_file = 'Vehicle_Parameters_QuarterCar.xlsx';
+cache_file = 'cached_params.m';
 
-Chassis.SuspA1.hp_u_front = Chassis.SuspA1.hp_u_chassis_front;
-Chassis.SuspA1.hp_u_rear  = Chassis.SuspA1.hp_u_chassis_rear;
-Chassis.SuspA1.hp_u_out   = Chassis.SuspA1.hp_upright_u;
-Chassis.SuspA1.hp_l_front = Chassis.SuspA1.hp_l_chassis_front;
-Chassis.SuspA1.hp_l_rear  = Chassis.SuspA1.hp_l_chassis_rear;
-Chassis.SuspA1.hp_l_out   = Chassis.SuspA1.hp_upright_l;
 
-% --- Upright & Wheel Hub ---
-Chassis.SuspA1.wheel_center       = [0.000000, 0.640000, 0.266500];
-Chassis.SuspA1.upright_cg         = [0.016810, 0.582170, 0.281090]; 
+if ~isfile(excel_file)
+    error('The Excel file was not found in the current folder!');
+end
 
-% --- Pushrod & Bellcrank System ---
-Chassis.SuspA1.hp_pushrod_out     = [0.011607, 0.543330, 0.173935]; 
-Chassis.SuspA1.hp_bcr_pivot       = [0.009900, 0.244890, 0.277836];
-Chassis.SuspA1.hp_bcr_pushrod     = [0.009540, 0.351996, 0.310579];
-Chassis.SuspA1.hp_bcr_shock       = [0.009519, 0.318301, 0.312066];
-Chassis.SuspA1.hp_shock_chassis   = [0.007846, 0.233225, 0.468064];
 
-Chassis.SuspA1.hp_pushrod_in      = Chassis.SuspA1.hp_bcr_pushrod;
+excel_info = dir(excel_file);
+excel_date = excel_info.datenum;
 
-%% 2. Automatic Calculations for Simscape
-Chassis.SuspA1.pushrod_length = norm(Chassis.SuspA1.hp_pushrod_out - Chassis.SuspA1.hp_pushrod_in);
-Chassis.SuspA1.pushrod_half_length = Chassis.SuspA1.pushrod_length / 2;
 
-%% 3. Mass and Inertia Properties (from Excel)
-Chassis.Body.Mass_Total      = 255.07; 
-Chassis.SuspA1.upright_mass  = 1.0;        
-Chassis.SuspA1.wishbone_u_m  = 0.12;   
-Chassis.SuspA1.wishbone_l_m  = 0.165; 
-Chassis.SuspA1.wheel_mass    = 10.0;  
-Chassis.SuspA1.bcr_mass      = 0.4;    
-Chassis.Body.Inertia_Tensor  = [27, 0, 0; 0, 74, 0; 0, 0, 70]; 
+needs_update = true;
 
-%% 4. Springs and Dampers (from Excel)
-Chassis.SuspA1.spring_rate   = 10; 
-Chassis.SuspA1.spring_preload= 0.008;   
-Chassis.SuspA1.damping_coeff = 1000;     
-Chassis.SuspA1.free_length   = 0.25;    
+if isfile(cache_file)
+    cache_info = dir(cache_file);
+    if cache_info.datenum > excel_date
+        needs_update = false;
+    end
+end
+
+%% Generate Cache File if the excel file was modified 
+if needs_update
+    disp('Modifications detected in Excel. Reading data and generating new cache...');
+
+   
+    T = readtable(excel_file, 'Sheet', 'Parameters');
+
+%cache file
+    fid = fopen(cache_file, 'w');
+    fprintf(fid, '%% Auto-generated file from Excel. DO NOT EDIT MANUALLY!\n\n');
+
+    
+    for i = 1:height(T)
+        category = char(T.Category{i});
+        param = char(T.Parameter{i});
+        val_x = T.Value_X(i);
+        val_y = T.Value_Y(i);
+        val_z = T.Value_Z(i);
+        unit = char(T.Unit{i});
+
+     
+        if ~isnan(val_y) && ~isnan(val_z)
+            fprintf(fid, '%s.%s.value = [%g, %g, %g];\n', category, param, val_x, val_y, val_z);
+        else
+          
+            fprintf(fid, '%s.%s.value = %g;\n', category, param, val_x);
+        end
+       
+        fprintf(fid, '%s.%s.unit = ''%s'';\n', category, param, unit);
+    end
+
+ 
+    fprintf(fid, '\n%% Automatic Calculations for Simscape\n');
+    fprintf(fid, 'Hardpoints.hp_pushrod_in.value = Hardpoints.hp_bcr_pushrod.value;\n');
+    fprintf(fid, 'Hardpoints.pushrod_length.value = norm(Hardpoints.hp_pushrod_out.value - Hardpoints.hp_pushrod_in.value);\n');
+
+    fclose(fid);
+    disp('Cache generated successfully!');
+else
+    disp('No changes detected in Excel. Loading parameters from cache...');
+end
+
+%% Load Data into Workspace
+run(cache_file);
 
 disp('>>> init_car script loaded successfully!');
