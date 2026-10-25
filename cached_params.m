@@ -1,0 +1,54 @@
+% Auto-generated file from Excel. DO NOT EDIT MANUALLY!
+
+Hardpoints.hp_u_chassis_front.value = [0.152882, 0.207316, 0.271782];
+Hardpoints.hp_u_chassis_front.unit = 'm';
+Hardpoints.hp_u_chassis_rear.value = [-0.180729, 0.225, 0.250894];
+Hardpoints.hp_u_chassis_rear.unit = 'm';
+Hardpoints.hp_upright_u.value = [-0.012087, 0.521103, 0.3815];
+Hardpoints.hp_upright_u.unit = 'm';
+Hardpoints.hp_l_chassis_front.value = [0.2, 0.203347, 0.07635];
+Hardpoints.hp_l_chassis_front.unit = 'm';
+Hardpoints.hp_l_chassis_rear.value = [-0.196, 0.225, 0.07635];
+Hardpoints.hp_l_chassis_rear.unit = 'm';
+Hardpoints.hp_upright_l.value = [0.011982, 0.588501, 0.1525];
+Hardpoints.hp_upright_l.unit = 'm';
+Hardpoints.wheel_center.value = [0, 0.64, 0.2665];
+Hardpoints.wheel_center.unit = 'm';
+Hardpoints.upright_cg.value = [0.01681, 0.58217, 0.28109];
+Hardpoints.upright_cg.unit = 'm';
+Hardpoints.hp_pushrod_out.value = [0.011607, 0.54333, 0.173935];
+Hardpoints.hp_pushrod_out.unit = 'm';
+Hardpoints.hp_bcr_pivot.value = [0.0099, 0.24489, 0.277836];
+Hardpoints.hp_bcr_pivot.unit = 'm';
+Hardpoints.hp_bcr_pushrod.value = [0.00954, 0.351996, 0.310579];
+Hardpoints.hp_bcr_pushrod.unit = 'm';
+Hardpoints.hp_bcr_shock.value = [0.009519, 0.318301, 0.312066];
+Hardpoints.hp_bcr_shock.unit = 'm';
+Hardpoints.hp_shock_chassis.value = [0.007846, 0.233225, 0.468064];
+Hardpoints.hp_shock_chassis.unit = 'm';
+Mass.Mass_Total.value = 255.07;
+Mass.Mass_Total.unit = 'kg';
+Mass.upright_mass.value = 1;
+Mass.upright_mass.unit = 'kg';
+Mass.wishbone_u_m.value = 0.12;
+Mass.wishbone_u_m.unit = 'kg';
+Mass.wishbone_l_m.value = 0.165;
+Mass.wishbone_l_m.unit = 'kg';
+Mass.wheel_mass.value = 10;
+Mass.wheel_mass.unit = 'kg';
+Mass.bcr_mass.value = 0.4;
+Mass.bcr_mass.unit = 'kg';
+Inertia.Inertia_Tensor_Diag.value = [27, 74, 70];
+Inertia.Inertia_Tensor_Diag.unit = 'kg*m^2';
+Spring.spring_rate.value = 78807;
+Spring.spring_rate.unit = 'N/m';
+Spring.spring_preload.value = 0.008;
+Spring.spring_preload.unit = 'm';
+Spring.damping_coeff.value = 4000;
+Spring.damping_coeff.unit = 'N*s/m';
+Spring.free_length.value = 0.25;
+Spring.free_length.unit = 'm';
+
+% Automatic Calculations for Simscape
+Hardpoints.hp_pushrod_in.value = Hardpoints.hp_bcr_pushrod.value;
+Hardpoints.pushrod_length.value = norm(Hardpoints.hp_pushrod_out.value - Hardpoints.hp_pushrod_in.value);
