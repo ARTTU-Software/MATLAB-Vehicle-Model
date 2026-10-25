@@ -255,7 +255,7 @@ InitSet.Skidpad.Instance     = '';
 InitSet.Skidpad.Data         = {...
     'aChassis','rad', 0,   0,     0;
     'vChassis','m/s', 1,   0,     0;
-    'sChassis','m', -25,   0,     0};
+    'sChassis','m', -15,   0,     0};
 %% Scene Slalom, Slow Start
 InitSet.Slalom.Type   = 'Slalom';
 InitSet.Slalom.Instance     = '';

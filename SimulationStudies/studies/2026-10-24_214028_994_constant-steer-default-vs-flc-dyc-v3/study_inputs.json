@@ -1,0 +1,16 @@
+{
+  "name": "constant-steer-default-vs-flc-dyc-v3",
+  "execution": "sequential",
+  "model": "sm_car",
+  "maneuver": "constant steer",
+  "steeringAngles_deg": [
+    20,
+    30,
+    40
+  ],
+  "controllers": [
+    "Default",
+    "FLC_DYC_V3"
+  ],
+  "stopTime_s": 19
+}

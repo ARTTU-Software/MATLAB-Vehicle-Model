@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "errors": [],
+  "model_records_read": 151,
+  "source_fingerprints_checked": 521,
+  "sm_car_raw_block_count": 3998,
+  "cached_model_records_reused": 150,
+  "scope": "Saved-file integrity only; no runtime verification"
+}

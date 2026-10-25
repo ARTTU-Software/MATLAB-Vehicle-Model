@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-10-24T16:57:45.422357+00:00",
+  "inspection": "saved_files_only_no_matlab",
+  "project_root": "/Users/andrei/Desktop/FSAE/Vehicle Model/Vehicle_Model",
+  "library_roots": {
+    "@library0": "/Applications/MATLAB_R2026b.app/toolbox"
+  },
+  "small_value_limit": 100,
+  "inspector_sha256": "034deee86b816a109946eb405490c6f556a65795b20be7a128b2e03248ddeabf",
+  "model_records_reused_by_fingerprint": 150,
+  "excluded_directories": [
+    ".git",
+    "SimulationStudies",
+    "__pycache__",
+    "slprj",
+    "spinfo",
+    "work"
+  ],
+  "counts": {
+    "models_and_libraries": 151,
+    "saved_blocks": 44161,
+    "connections": 34858,
+    "variable_records": 14805,
+    "parameter_records": 184326,
+    "source_files": 317,
+    "workbooks": 8,
+    "references": 6277,
+    "missing_references": 15,
+    "ambiguous_references": 0,
+    "gaps": 166
+  },
+  "limitations": [
+    "No base workspace initialized or inspected; source assignments are not runtime values.",
+    "No compiled variant resolution, mask evaluation, solver execution, or signal availability validation.",
+    "Offline SLX/MDL parsing does not expose undocumented defaults or opaque MATLAB serialized objects.",
+    "References point to definition records; library instances are not flattened or evaluated.",
+    "Lexical source indexing does not prove execution order, control flow, dynamic fields, or complete variable coverage.",
+    "MAT files may contain old results; saved contents are not assumed to be current model inputs.",
+    "Path precedence and library forwarding are not resolved using MATLAB; candidates remain explicit."
+  ]
+}

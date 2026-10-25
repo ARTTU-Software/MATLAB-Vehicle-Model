@@ -7,13 +7,12 @@ function x_next = prediction_model(x, u)
 % Get States
 v_x           = x(1);
 v_y           = x(2);
-Phi           = x(3);
-Phi_dot       = x(4);
-a_x           = x(5);
-a_y           = x(6);
+Phi_dot       = x(3);
+a_x           = x(4);
+a_y           = x(5);
 
 % Get Parameters
-miu_rd        = 1;
+miu_rd        = 0.85;
 Params        = get_vehicle_params();
 
 % Get Inputs
@@ -87,12 +86,9 @@ Phi_dot_dot   = 1 / Params.Car.Izz * ((Fy_fl * cos(delta_L) + Fx_fl * sin(delta_
 % Random walk model (assume 0 jerk with exception of some noise) [4, 5, 6]
 a_x_dot       = 0;
 a_y_dot       = 0;
-x_dot         = [v_x_dot, v_y_dot, Phi_dot, Phi_dot_dot, a_x_dot, a_y_dot]';
+x_dot         = [v_x_dot, v_y_dot, Phi_dot_dot, a_x_dot, a_y_dot]';
 
 % Update state using Euler integration
 x_next        = x + x_dot * Params.TimeStep; 
-
-% Ensure estimated Yaw angle is wrapped between [-π,π]
-x_next(3)     = atan2(sin(x_next(3)),cos(x_next(3)));
 
 end

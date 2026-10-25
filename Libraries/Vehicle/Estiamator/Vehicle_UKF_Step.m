@@ -19,8 +19,6 @@ function State_Vec = Vehicle_UKF_Step(yMeas, u)
     %-------------------------------------------
     % Measurement vector 
     % - 1. GPS velocity [m/s]
-    % - 2. GPS course over ground [rad]
-    % - 3. GPS yaw angle [rad]
     % - 4. IMU angular velocity on Z [rad/s]
     % - 5. IMU acceleration on X [m/s^2]
     % - 6. IMU acceleration on Y [m/s^2]

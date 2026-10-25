@@ -234,7 +234,7 @@ switch maneuver_str
 
     % --- Skidpad from Formula Student
     case 'skidpad'
-        evalin('base',['Init = IDatabase.Skidpad.' init_inst ';']);
+        evalin('base',['Init_data_skidpad']);
         evalin('base',['Maneuver_data_skidpad']);
         set_param(drive_h,'popup_driver_type','Closed Loop');
         evalin('base',['Driver = DDatabase.Skidpad.' veh_inst ';']);

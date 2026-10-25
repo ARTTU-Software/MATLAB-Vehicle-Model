@@ -34,7 +34,7 @@ if kappax >= 0
 else
     Ex = (long.PEX1 + long.PEX2 * dfz + long.PEX3 * dfz^2) * (1 + long.PEX4) * long.LEX;
 end
-
+Ex = min(Ex, 1);
 % 2. PROTECT Bx: Prevent denominator cancellation
 Bx = Kx / max(Cx * Dx, single(1e-4));
 
