@@ -1,0 +1,10 @@
+{
+  "name": "wot-body-mass-sensitivity",
+  "execution": "sequential",
+  "model": "sm_car",
+  "maneuver": "WOT Braking",
+  "bodyMassOffsets_kg": [-10, 0, 10],
+  "controller": "Default",
+  "stateEstimator": "through",
+  "stopTime_s": null
+}

@@ -65,6 +65,14 @@ matlab -sd "<new-study>" -batch "rerun_study('full','<actual approval>')"
 
 Only sequential execution is implemented. Stage calls use that study's reviewed local snapshots and study code. No automatic retry or approval carryover is introduced. Keep failure transcripts only in `logs/`, remove temporary project copies, and remove validation data after successful full export. Shared inventory and historical Skidpad preview data stay outside studies. Read prior study notes for limits; new stop-flag logging still needs approved runtime validation.
 
+Select short-validation cases separately from the full run list using
+`cfg.validationRunIDs` in the study's configuration reader. A parameter-only
+sweep needs one representative changed case. Add cases only for changes
+requiring a different compiled model configuration, and explain the grouping
+in the study plan. The shared runner defaults to the first run when no explicit
+selection is supplied; new studies should state the representative IDs
+explicitly. Every full run still checks its effective inputs.
+
 ## Plot, rerun and input starters
 
 Each study must adapt its input JSON, matching MATLAB reader, selected signals, plot layout and metrics to the actual request. The shared Constant Steer files are references for agreed conventions, not a fixed schema, required signal list or universal plot arrangement. Do not carry steering sweeps, controller choices, maneuver markers or outputs into an unrelated study merely because they appear in the example. Keep only the user-facing inputs needed for that study.

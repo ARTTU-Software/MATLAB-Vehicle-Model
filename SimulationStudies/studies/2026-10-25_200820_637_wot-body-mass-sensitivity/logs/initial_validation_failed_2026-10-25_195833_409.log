@@ -1,0 +1,135 @@
+validation R003 starting (1/1).
+Importing Brakes data
+Import completed
+Importing Chassis data
+Import completed
+Importing Powertrain data
+Import completed
+Generating IDatabase from sm_car_gen_init_database
+Adding sm_car_maneuverdata_crg_balkans
+Adding sm_car_maneuverdata_crg_balkans_end
+Adding sm_car_maneuverdata_crg_balkans_end_f
+Adding sm_car_maneuverdata_crg_balkans_f
+Adding sm_car_maneuverdata_crg_dej_wide
+Adding sm_car_maneuverdata_crg_dej_wide_f
+Adding sm_car_maneuverdata_crg_germania
+Adding sm_car_maneuverdata_crg_germania_f
+Adding sm_car_maneuverdata_crg_hockenheim
+Adding sm_car_maneuverdata_crg_hockenheim_f
+Adding sm_car_maneuverdata_double_lane_change
+Adding sm_car_maneuverdata_double_lane_change_iso3888
+Adding sm_car_maneuverdata_knc
+Adding sm_car_maneuverdata_none
+Adding sm_car_maneuverdata_ramp_steer
+Running...
+Adding sm_car_maneuverdata_skidpad
+Adding sm_car_maneuverdata_slalom
+Adding sm_car_maneuverdata_testrig4Post_cycle1
+Adding sm_car_maneuverdata_testrig4Post_randFreqLim
+Adding sm_car_maneuverdata_turn
+Adding sm_car_maneuverdata_wot_braking
+Generating DDatabase from sm_car_gen_driver_database
+Adding sm_car_define_camera_achilles
+Adding sm_car_scenedata_crg_balkans
+Adding sm_car_scenedata_crg_balkans_end
+Adding sm_car_scenedata_crg_balkans_end_f
+Adding sm_car_scenedata_crg_balkans_f
+Adding sm_car_scenedata_crg_dej_wide
+Adding sm_car_scenedata_crg_dej_wide_f
+Adding sm_car_scenedata_crg_germania
+Adding sm_car_scenedata_crg_germania_f
+Adding sm_car_scenedata_crg_hockenheim
+Adding sm_car_scenedata_crg_hockenheim_f
+Adding sm_car_scenedata_double_lane_change
+Adding sm_car_scenedata_double_lane_change_iso3888
+Adding sm_car_scenedata_plane_grid
+Adding sm_car_scenedata_skidpad
+Adding sm_car_scenedata_slalom
+Adding sm_car_scenedata_track_mallory_park_obstacle
+Adding sm_car_controlparam_FLCDYC
+Adding sm_car_controlparam_FLCDYC_V2
+Adding sm_car_controlparam_FLCDYC_V3
+Adding sm_car_controlparam_FeedF
+Adding sm_car_controlparam_Ideal_L1_R1_L2_R2_achilles
+Adding sm_car_controlparam_Ideal_L1_R1_L2_R2_default
+Adding sm_car_controlparam_NoIMU
+Adding sm_car_controlparam_SlipControl
+Adding sm_car_controlparam_SlipControlV2
+Adding sm_car_controlparam_default
+Generating Simulink library 'Custom_lib' in the MATLAB namespace parent directory '/Users/andrei/Desktop/FSAE/Vehicle Model/Vehicle_Model/SimulationStudies/studies/2026-10-25_195833_409_wot-body-mass-sensitivity/.work/validation/R003/project/Libraries/Vehicle/Utilities/' ...
+[Warning: Non-scalar data in first argument to set_param is detected.
+Only first handle in the matrix is processed.] 
+[> In sm_car_config_maneuver (line 54)
+In startup_sm_car (line 66)
+In matlab.project.loadProject
+In openProject
+In run_study (line 122)
+In rerun_study (line 68)
+In amend_and_validate_wot (line 44)] 
+[Warning:
+Problem encountered opening project: SSVT_FSAE
+startup_sm_car.m (Scripts_Data/startup_sm_car.m)
+The following warnings were thrown. See command window for details.
+Non-scalar data in first argument to set_param is detected.
+Only first handle in the matrix is processed.
+Inputs must be character vectors, cell arrays of character vectors, or string
+arrays.
+/Users/andrei/Desktop/FSAE/Vehicle
+Model/Vehicle_Model/SimulationStudies/studies/2026-10-25_195833_409_wot-body-mass-sensitivity/.work/validation/R003/project/Scripts_Data/startup_sm_car.m] 
+[> In matlab.project.loadProject
+In openProject
+In run_study (line 122)
+In rerun_study (line 68)
+In amend_and_validate_wot (line 44)] 
+[Warning: Non-scalar data in first argument to set_param is detected.
+Only first handle in the matrix is processed.] 
+[> In sm_car_config_maneuver (line 54)
+In simulate_run (line 31)
+In run_study (line 130)
+In rerun_study (line 68)
+In amend_and_validate_wot (line 44)] 
+[Warning: Block diagram 'Driver' is shadowed by a variable of the same name.] 
+[> In Simulink.Simulation.internal.DesktopSimHelper
+In Simulink.Simulation.internal.DesktopSimHelper.sim
+In Simulink/SimulationInput/sim
+In simulate_run (line 70)
+In run_study (line 130)
+In rerun_study (line 68)
+In amend_and_validate_wot (line 44)] 
+Error using simulate_run (line 70)
+Error evaluating 'InitFcn' callback of block_diagram 'sm_car'.
+Callback string is 'sm_car_config_camera;
+Vehicle = sm_car_vehcfg_checkConfig(Vehicle);
+sm_car_check_tire_model(bdroot);
+studyEffectiveInputs = check_inputs(studyExpectedRun,studyInputFile);
+studyInputsChecked = true;'
+
+Error in run_study (line 130)
+        simulate_run(cfg, row, stopSeconds, resultFile);
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in rerun_study (line 68)
+    run_study(studyFolder, stage, approvalNote);
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error in amend_and_validate_wot (line 44)
+rerun_study('validation',approvalNote);
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Caused by:
+    Error using Simulink.Simulation.internal.DesktopSimHelper
+    Requested body mass did not reach the physical body.
+    
+    Error in Simulink.Simulation.internal.DesktopSimHelper.sim
+    
+    Error in Simulink.SimulationInput/sim
+    
+    Error in simulate_run (line 70)
+    out = sim(in);
+    ^^^^^^^^^^^^^^
+    Error in run_study (line 130)
+            simulate_run(cfg, row, stopSeconds, resultFile);
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    Error in rerun_study (line 68)
+        run_study(studyFolder, stage, approvalNote);
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    Error in amend_and_validate_wot (line 44)
+    rerun_study('validation',approvalNote);
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

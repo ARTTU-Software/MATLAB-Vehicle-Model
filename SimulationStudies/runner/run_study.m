@@ -11,7 +11,9 @@ function run_study(studyFolder, stage, approvalNote)
 %   Call the reviewed function in studyFolder/code, not this template
 %   directly. It verifies the JSON/code/baseline, uses isolated project
 %   copies and records progress in state.mat. Failures retain a console
-%   log. Successful full export removes temporary validation data.
+%   log. Validation uses cfg.validationRunIDs (default: first run);
+%   full execution uses all cfg.runs. Successful full export removes
+%   temporary validation data.
 %   This function has no return value and rejects completed studies.
 %
 %   Example: inside a new, separately approved MATLAB batch process
@@ -50,6 +52,19 @@ if strcmp(stage, 'full')
 end
 
 %% 2. Choose the stage duration, results folder and temporary working folder
+stageRuns = cfg.runs;
+if strcmp(stage, 'validation')
+    validationRunIDs = cfg.runs.ID(1);
+    if isfield(cfg,'validationRunIDs')
+        validationRunIDs = string(cfg.validationRunIDs(:));
+    end
+    assert(~isempty(validationRunIDs) && ...
+        numel(unique(validationRunIDs))==numel(validationRunIDs) && ...
+        all(ismember(validationRunIDs,cfg.runs.ID)), ...
+        'Study:ValidationCases','Invalid representative validation run IDs.');
+    [~,indices] = ismember(validationRunIDs,cfg.runs.ID);
+    stageRuns = cfg.runs(indices,:);
+end
 stopSeconds = cfg.validationSeconds;
 resultFolder = fullfile(studyFolder, 'validation');
 if strcmp(stage, 'full')
@@ -80,17 +95,18 @@ diary(logFile);
 diaryCleanup = onCleanup(@() diary('off'));
 state.status = [stage '_running'];
 state.(stage).approval = char(approvalNote);
+state.(stage).selectedRuns = stageRuns.ID;
 state.(stage).approvedAt = char(datetime('now','TimeZone',cfg.timezone));
 save(fullfile(studyFolder, 'state.mat'), 'state', 'cfg');
 
 %% 4. Run each case from a fresh copy of the saved project
 % Fail fast; retain the failure transcript, not temporary project copies.
 try
-    for k = 1:height(cfg.runs)
-        row = cfg.runs(k,:);
+    for k = 1:height(stageRuns)
+        row = stageRuns(k,:);
         state.(stage).currentRun = char(row.ID);
         save(fullfile(studyFolder, 'state.mat'), 'state', 'cfg');
-        fprintf('%s %s starting (%d/%d).\n', stage, row.ID, k, height(cfg.runs));
+        fprintf('%s %s starting (%d/%d).\n', stage, row.ID, k, height(stageRuns));
         % Never overwrite or silently reuse results from another attempt.
         resultFile = fullfile(resultFolder, row.ID + ".mat");
         assert(~isfile(resultFile), 'Study:ExistingResult', ...
@@ -117,7 +133,7 @@ try
         close(project);
         cd(codeFolder);
         rmdir(root, 's');
-        state.(stage).completedRuns = cfg.runs.ID(1:k);
+        state.(stage).completedRuns = stageRuns.ID(1:k);
         save(fullfile(studyFolder, 'state.mat'), 'state', 'cfg');
         fprintf('%s %s completed.\n', stage, row.ID);
     end

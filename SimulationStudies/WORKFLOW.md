@@ -23,6 +23,7 @@ All paths in this document are relative to the project root. Use portable paths 
 | Item | Rule |
 | --- | --- |
 | Start | Show the plan and dummy previews; obtain approval for short validation, then a second approval for the full study |
+| Validation coverage | Validate one representative changed configuration; parameter-only sweeps do not need validation at every value. Add cases only for changes requiring a different compiled model configuration |
 | Source changes | Temporary overrides; modify original files only when explicitly requested |
 | macOS | Sequential execution only, even if parallel facilities are installed |
 | Windows | Study input must explicitly specify sequential or parallel execution |
@@ -104,7 +105,7 @@ Use per-run input objects or temporary isolated configurations where supported. 
 ## Validation and execution approvals
 
 1. Save the plan, exact expanded run list, baseline provenance, shared-inventory reference and dependency hashes, study code, and first approval record.
-2. Run only the approved short validation to check that requested changes are applied correctly. Check effective parameter values, generated maneuver data, and available requested signal paths/extraction. Choose the shortest useful duration and explicitly state what it cannot validate, such as later maneuver phases. Do not run a full-length validation for output preview purposes; use historical Skidpad data for the full output layout.
+2. Run only the approved short validation to establish that the changed model runs and the requested inputs/outputs are applied correctly. For a parameter-only sweep, validate one representative changed configuration, not every parameter value. Add validation cases only for changes requiring a different compiled model configuration, such as a different structural variant or estimator bypass state. Rebuilding the same structure in separate isolated processes does not by itself justify validating every numeric value. Record the selected run IDs and compilation-related reason for any additional cases. Continue effective-input readbacks for every full run. Check effective parameter values, generated maneuver data, and available requested signal paths/extraction. Choose the shortest useful duration and explicitly state what it cannot validate, such as later maneuver phases. Do not run a full-length validation for output preview purposes; use historical Skidpad data for the full output layout.
 3. On Windows parallel studies, validate worker setup/isolation within the approved short validation scope. If parallel execution is unavailable, report the issue rather than silently switching the approved mode.
 4. Show the validation findings, effective inputs, any failures, and remaining limitations. Obtain the user's second approval for the full study. Do not automatically start full runs when the short validation finishes. Keep validation outputs separate from study metrics; short runs do not count as completed study runs.
 5. After the second approval, execute full runs from the same baseline, without carrying state or parameter changes from the preceding run. Save each completed run independently; avoid accumulating full outputs in memory.
