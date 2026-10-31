@@ -13,12 +13,12 @@ Params.Physics.g  = 9.81;    % Accelerația gravitațională [m/s^2]
 Params.Physics.mu = 2.5;    % Coeficientul de frecare maxim estimat (Kamm)
 
 %% 3. Parametri Anvelope (Cornering & Longitudinal)
-Params.Car.C_af = 46504;     % Cornering stiffness punte față [N/rad]
-Params.Car.C_ar = 48872;     % Cornering stiffness punte spate [N/rad]
+Params.Car.C_af = 46504 * 2;     % Cornering stiffness punte față [N/rad]
+Params.Car.C_ar = 48872 * 2;     % Cornering stiffness punte spate [N/rad]
 
 % Așteptăm valorile exacte de la Andrei mâine; acum punem estimări (50.000)
-Params.Car.C_kf = 39736;     % Longitudinal stiffness punte față [N/slip]
-Params.Car.C_kr = 43677;     % Longitudinal stiffness punte spate [N/slip]
+Params.Car.C_kf = 39736 * 2;     % Longitudinal stiffness punte față [N/slip]
+Params.Car.C_kr = 43677 * 2;     % Longitudinal stiffness punte spate [N/slip]
 
 %% 4. Condiții Inițiale (Plecarea în test)
 Params.Sim.vx_init = 1;     % Viteza longitudinală de start [m/s]
