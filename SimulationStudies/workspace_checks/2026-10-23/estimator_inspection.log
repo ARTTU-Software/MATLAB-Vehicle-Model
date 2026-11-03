@@ -1,0 +1,880 @@
+
+BLOCK sm_car/Controller/Default/State Estimation SID 3525:57
+  4×1 struct array with fields:
+
+    Type
+    Position
+    SrcBlock
+    SrcPort
+    DstBlock
+    DstPort
+
+status: ok
+model: sm_car
+scope: "blk_3525:57"
+token_estimate: 3561
+blocks: 
+  interface: 
+    Inport: 
+      - id: "blk_3525:58" #u1
+        Name: aSteerWheel
+      - id: "blk_3525:60" #u2
+        Name: VehBus
+    Outport: 
+      - id: "blk_3525:59" #y1
+        Name: StateEst
+      - id: "blk_3525:334" #y2
+        Name: Out Bus Element
+      - id: "blk_3525:335" #y2
+        Name: Out Bus Element1
+      - id: "blk_3525:336" #y2
+        Name: Out Bus Element2
+  algorithm: 
+    - id: "blk_3525:202"
+      Name: |
+        Bus
+        Creator
+      BlockType: BusCreator
+      derived_info: 
+        expression: "y1 = BusCreator(u1, u2, u3, u4, u5) where u1=blk_3525:206.y1, u2=blk_3525:206.y2, u3=blk_3525:206.y3, u4=blk_3525:206.y4, u5=blk_3525:206.y5"
+    - id: "blk_3525:69"
+      Name: |
+        Bus
+        Selector
+      BlockType: BusSelector
+      derived_info: 
+        expression: "[y1, y2, y3, y4, y5, y6, y7, y8, y9, y10] = BusSelector(u1) where u1=blk_3525:60.y1"
+    - id: "blk_3525:196"
+      Name: Data Type Conversion
+      BlockType: DataTypeConversion
+      derived_info: 
+        expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:347.xhat"
+    - id: "blk_3525:383"
+      Name: Data Type Conversion1
+      BlockType: DataTypeConversion
+      derived_info: 
+        expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:153.p_Inputs"
+    - id: "blk_3525:206"
+      Name: Demux
+      BlockType: Demux
+      derived_info: 
+        expression: "[y1, y2, y3, y4, y5] = u1 where u1=blk_3525:196.y1"
+    - id: "blk_3525:342"
+      Name: Rate Transition1
+      BlockType: RateTransition
+      derived_info: 
+        expression: "y1 = RateTransition(u1) where u1=blk_3525:153.p_Inputs"
+    - id: "blk_3525:343"
+      Name: Rate Transition2
+      BlockType: RateTransition
+      derived_info: 
+        expression: "y1 = RateTransition(u1) where u1=blk_3525:153.Meas"
+    - id: "blk_3525:384"
+      Name: Rate Transition4
+      BlockType: RateTransition
+      derived_info: 
+        expression: "y1 = RateTransition(u1) where u1=blk_3525:383.y1"
+    - id: "blk_3525:153"
+      Name: Sensor Noise Simulation
+      BlockType: SubSystem
+      derived_info: 
+        expression: "[p_Inputs, Meas] = Sensor Noise Simulation(p__x3C_vx_x3E_, p__x3C_vy_x3E_, p__x3C_vz_x3E_, p__x3C_nYaw_x3E_, p__x3C_gx_x3E_, p__x3C_gy_x3E_, p__x3C_w_fl_x3E_, p__x3C_w_fr_x3E_, p__x3C_w_rl_x3E_, p__x3C_w_rr_x3E_, delta) where p__x3C_vx_x3E_=blk_3525:69.y1, p__x3C_vy_x3E_=blk_3525:69.y2, p__x3C_vz_x3E_=blk_3525:69.y3, p__x3C_nYaw_x3E_=blk_3525:69.y4, p__x3C_gx_x3E_=blk_3525:69.y5, p__x3C_gy_x3E_=blk_3525:69.y6, p__x3C_w_fl_x3E_=blk_3525:69.y7, p__x3C_w_fr_x3E_=blk_3525:69.y8, p__x3C_w_rl_x3E_=blk_3525:69.y9, p__x3C_w_rr_x3E_=blk_3525:69.y10, delta=blk_3525:58.y1"
+      blocks: 
+        interface: 
+          Inport: 
+            - id: "blk_3525:154" #u1
+              Name: "<vx>"
+            - id: "blk_3525:155" #u2
+              Name: "<vy>"
+            - id: "blk_3525:394" #u3
+              Name: "<vz>"
+            - id: "blk_3525:157" #u4
+              Name: "<nYaw>"
+            - id: "blk_3525:158" #u5
+              Name: "<gx>"
+            - id: "blk_3525:159" #u6
+              Name: "<gy>"
+            - id: "blk_3525:160" #u7
+              Name: "<w_fl>"
+            - id: "blk_3525:161" #u8
+              Name: "<w_fr>"
+            - id: "blk_3525:162" #u9
+              Name: "<w_rl>"
+            - id: "blk_3525:163" #u10
+              Name: "<w_rr>"
+            - id: "blk_3525:164" #u11
+              Name: delta
+          Outport: 
+            - id: "blk_3525:166" #y1
+              Name: Inputs
+            - id: "blk_3525:165" #y2
+              Name: Meas
+        algorithm: 
+          - id: "blk_3525:80"
+            Name: |
+              Bus
+              Creator
+            BlockType: BusCreator
+            derived_info: 
+              expression: "y1 = BusCreator(u1, u2, u3, u4, u5) where u1=blk_3525:193.y1, u2=blk_3525:191.y1, u3=blk_3525:192.y1, u4=blk_3525:194.y1, u5=blk_3525:195.y1"
+          - id: "blk_3525:152"
+            Name: |
+              Bus
+              Creator1
+            BlockType: BusCreator
+            derived_info: 
+              expression: "y1 = BusCreator(u1, u2, u3, u4) where u1=blk_3525:185.y1, u2=blk_3525:188.y1, u3=blk_3525:189.y1, u4=blk_3525:190.y1"
+          - id: "blk_3525:185"
+            Name: Data Type Conversion
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:110.V_n"
+          - id: "blk_3525:195"
+            Name: Data Type Conversion10
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:107.omega_rr"
+          - id: "blk_3525:188"
+            Name: Data Type Conversion3
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:131.nYaw_n"
+          - id: "blk_3525:189"
+            Name: Data Type Conversion4
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:138.a_x_n"
+          - id: "blk_3525:190"
+            Name: Data Type Conversion5
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:145.a_y_n"
+          - id: "blk_3525:191"
+            Name: Data Type Conversion6
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:98.omega_rl"
+          - id: "blk_3525:192"
+            Name: Data Type Conversion7
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:101.omega_rr"
+          - id: "blk_3525:193"
+            Name: Data Type Conversion8
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:164.y1"
+          - id: "blk_3525:194"
+            Name: Data Type Conversion9
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_3525:104.omega_rl"
+          - id: "blk_3525:138"
+            Name: noise a_x
+            BlockType: SubSystem
+            derived_info: 
+              expression: "a_x_n = noise a_x(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_3525:158.y1"
+          - id: "blk_3525:145"
+            Name: noise a_y
+            BlockType: SubSystem
+            derived_info: 
+              expression: "a_y_n = noise a_y(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_3525:159.y1"
+          - id: "blk_3525:98"
+            Name: noise omega_fl
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rl = noise omega_fl(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_3525:160.y1"
+          - id: "blk_3525:101"
+            Name: noise omega_fr
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rr = noise omega_fr(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_3525:161.y1"
+          - id: "blk_3525:104"
+            Name: noise omega_rl
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rl = noise omega_rl(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_3525:162.y1"
+          - id: "blk_3525:107"
+            Name: noise omega_rr
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rr = noise omega_rr(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_3525:163.y1"
+          - id: "blk_3525:110"
+            Name: noise v_gps
+            BlockType: SubSystem
+            derived_info: 
+              expression: "V_n = noise v_gps(p__x3C_vx_x3E_, p__x3C_vy_x3E_, p__x3C_vz_x3E_) where p__x3C_vx_x3E_=blk_3525:154.y1, p__x3C_vy_x3E_=blk_3525:155.y1, p__x3C_vz_x3E_=blk_3525:394.y1"
+          - id: "blk_3525:131"
+            Name: noise yaw rate
+            BlockType: SubSystem
+            derived_info: 
+              expression: "nYaw_n = noise yaw rate(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_3525:157.y1"
+      connections: 
+        - id: "blk_3525:394.y1 -> blk_3525:110._x3C_vz_x3E_"
+        - id: "blk_3525:155.y1 -> blk_3525:110._x3C_vy_x3E_"
+        - id: "blk_3525:110.V_n -> blk_3525:185.u1"
+        - id: "blk_3525:195.y1 -> blk_3525:80.u5"
+          signal_name: omega_rr_n
+        - id: "blk_3525:194.y1 -> blk_3525:80.u4"
+          signal_name: omega_rl_n
+        - id: "blk_3525:193.y1 -> blk_3525:80.u1"
+          signal_name: delta
+        - id: "blk_3525:192.y1 -> blk_3525:80.u3"
+          signal_name: omega_fr_n
+        - id: "blk_3525:191.y1 -> blk_3525:80.u2"
+          signal_name: omega_fl_n
+        - id: "blk_3525:190.y1 -> blk_3525:152.u4"
+          signal_name: a_y_n
+        - id: "blk_3525:189.y1 -> blk_3525:152.u3"
+          signal_name: a_x_n
+        - id: "blk_3525:188.y1 -> blk_3525:152.u2"
+          signal_name: nYaw_n
+        - id: "blk_3525:185.y1 -> blk_3525:152.u1"
+          signal_name: V_GPS_n
+        - id: "blk_3525:152.y1 -> blk_3525:165.u1"
+        - id: "blk_3525:101.omega_rr -> blk_3525:192.u1"
+        - id: "blk_3525:163.y1 -> blk_3525:107._x3C_w_x3E_"
+        - id: "blk_3525:107.omega_rr -> blk_3525:195.u1"
+        - id: "blk_3525:159.y1 -> blk_3525:145._x3C_w_x3E_"
+        - id: "blk_3525:162.y1 -> blk_3525:104._x3C_w_x3E_"
+        - id: "blk_3525:131.nYaw_n -> blk_3525:188.u1"
+        - id: "blk_3525:104.omega_rl -> blk_3525:194.u1"
+        - id: "blk_3525:80.y1 -> blk_3525:166.u1"
+        - id: "blk_3525:145.a_y_n -> blk_3525:190.u1"
+        - id: "blk_3525:98.omega_rl -> blk_3525:191.u1"
+        - id: "blk_3525:154.y1 -> blk_3525:110._x3C_vx_x3E_"
+        - id: "blk_3525:138.a_x_n -> blk_3525:189.u1"
+        - id: "blk_3525:158.y1 -> blk_3525:138._x3C_w_x3E_"
+        - id: "blk_3525:161.y1 -> blk_3525:101._x3C_w_x3E_"
+        - id: "blk_3525:157.y1 -> blk_3525:131._x3C_w_x3E_"
+        - id: "blk_3525:160.y1 -> blk_3525:98._x3C_w_x3E_"
+        - id: "blk_3525:164.y1 -> blk_3525:193.u1"
+    - id: "blk_3525:347"
+      Name: UKF
+      BlockType: SubSystem
+      derived_info: 
+        expression: "xhat = UKF(StateTransitionFcnInputs, y1) where StateTransitionFcnInputs=blk_3525:342.y1, y1=blk_3525:343.y1"
+      blocks: 
+        interface: 
+          Inport: 
+            - id: "blk_3525:348" #u1
+              Name: StateTransitionFcnInputs
+            - id: "blk_3525:349" #u2
+              Name: y1
+          Outport: 
+            - id: "blk_3525:350" #y1
+              Name: xhat
+        algorithm: 
+          - id: "blk_3525:402"
+            Name: |
+              Compare
+              To Constant
+            BlockType: CompareToConstant
+            derived_info: 
+              expression: "y1 = (u1 <= const) where u1=blk_3525:400.y1, const=0.5"
+            ReferenceBlock: simulink/Logic and Bit Operations/Compare To Constant
+          - id: "blk_3525:340"
+            Name: Constant
+            BlockType: Constant
+            derived_info: 
+              expression: y1 = Value where Value=0
+          - id: "blk_3525:404"
+            Name: Constant1
+            BlockType: Constant
+            derived_info: 
+              expression: y1 = Value where Value=0
+          - id: "blk_3525:395"
+            Name: Delay
+            BlockType: Delay
+            derived_info: 
+              expression: "y1 = Delay(u1) where u1=blk_3525:373.y1"
+          - id: "blk_3525:400"
+            Name: Demux
+            BlockType: Demux
+            derived_info: 
+              expression: "[y1, y2, y3, y4, y5] = u1 where u1=blk_3525:373.y1"
+          - id: "blk_3525:396"
+            Name: MATLAB Function
+            BlockType: MATLABFunction
+            derived_info: 
+              expression: |
+                function Q = fcn(xhat)
+                
+                vx_safe = max(abs(xhat(1)), 1e-3);
+                
+                if vx_safe < 1.5
+                    Q_vy = single(2e-7);
+                else
+                    Q_vy = single((1e-4* vx_safe)^2);
+                end
+                
+                Q = single(diag([1e-5, Q_vy, 1e-6, 5e-5, 1e-4]));
+          - id: "blk_3525:399"
+            Name: Mux
+            BlockType: Mux
+            derived_info: 
+              expression: "y1 = [u1, u2, u3, u4, u5] where u1=blk_3525:400.y1, u2=blk_3525:401.y1, u3=blk_3525:400.y3, u4=blk_3525:400.y4, u5=blk_3525:400.y5"
+          - id: "blk_3525:401"
+            Name: Switch
+            BlockType: Switch
+            derived_info: 
+              expression: "y1 = if (u2 != 0) then u1 else u3 where u1=blk_3525:404.y1, u2=blk_3525:402.y1, u3=blk_3525:400.y2"
+          - id: "blk_3525:373"
+            Name: Unscented Kalman Filter
+            BlockType: UnscentedKalmanFilter
+            derived_info: 
+              expression: "y1 = UnscentedKalmanFilter(u1, u2, u3, u4) where u1=blk_3525:396.Q, u2=blk_3525:348.y1, u3=blk_3525:349.y1, u4=blk_3525:340.y1"
+            ReferenceBlock: sharedTrackingLibrary/Unscented Kalman Filter
+      connections: 
+        - id: "blk_3525:399.y1 -> blk_3525:350.u1"
+        - id: "blk_3525:400.y5 -> blk_3525:399.u5"
+        - id: "blk_3525:400.y4 -> blk_3525:399.u4"
+        - id: "blk_3525:400.y3 -> blk_3525:399.u3"
+        - id: "blk_3525:401.y1 -> blk_3525:399.u2"
+        - id: "blk_3525:400.y2 -> blk_3525:401.u3"
+        - id: "blk_3525:400.y1 -> blk_3525:402.u1,blk_3525:399.u1"
+        - id: "blk_3525:404.y1 -> blk_3525:401.u1"
+        - id: "blk_3525:402.y1 -> blk_3525:401.u2"
+        - id: "blk_3525:395.y1 -> blk_3525:396.xhat"
+        - id: "blk_3525:396.Q -> blk_3525:373.u1"
+        - id: "blk_3525:373.y1 -> blk_3525:400.u1,blk_3525:395.u1"
+        - id: "blk_3525:340.y1 -> blk_3525:373.u4"
+        - id: "blk_3525:348.y1 -> blk_3525:373.u2"
+        - id: "blk_3525:349.y1 -> blk_3525:373.u3"
+connections: 
+  - id: "blk_3525:69.y3 -> blk_3525:153._x3C_vz_x3E_"
+    signal_name: "<vz>"
+  - id: "blk_3525:384.y1 -> blk_3525:335.u1"
+  - id: "blk_3525:383.y1 -> blk_3525:384.u1"
+  - id: "blk_3525:347.xhat -> blk_3525:196.u1"
+  - id: "blk_3525:343.y1 -> blk_3525:347.y1"
+  - id: "blk_3525:342.y1 -> blk_3525:347.StateTransitionFcnInputs"
+  - id: "blk_3525:206.y5 -> blk_3525:202.u5"
+    signal_name: a_y
+  - id: "blk_3525:206.y4 -> blk_3525:202.u4"
+    signal_name: a_x
+  - id: "blk_3525:206.y3 -> blk_3525:202.u3"
+    signal_name: phi_dot
+  - id: "blk_3525:206.y2 -> blk_3525:202.u2"
+    signal_name: v_y
+  - id: "blk_3525:206.y1 -> blk_3525:202.u1"
+    signal_name: v_x
+  - id: "blk_3525:202.y1 -> blk_3525:59.u1,blk_3525:336.u1"
+    signal_name: UKF
+  - id: "blk_3525:196.y1 -> blk_3525:206.u1"
+  - id: "blk_3525:153.Inputs -> blk_3525:342.u1,blk_3525:383.u1"
+    signal_name: Input
+  - id: "blk_3525:153.Meas -> blk_3525:334.u1,blk_3525:343.u1"
+    signal_name: Measument
+  - id: "blk_3525:58.y1 -> blk_3525:153.delta"
+    signal_name: delta
+  - id: "blk_3525:69.y10 -> blk_3525:153._x3C_w_rr_x3E_"
+    signal_name: "<w>"
+  - id: "blk_3525:69.y9 -> blk_3525:153._x3C_w_rl_x3E_"
+    signal_name: "<w>"
+  - id: "blk_3525:69.y8 -> blk_3525:153._x3C_w_fr_x3E_"
+    signal_name: "<w>"
+  - id: "blk_3525:69.y7 -> blk_3525:153._x3C_w_fl_x3E_"
+    signal_name: "<w>"
+  - id: "blk_3525:69.y6 -> blk_3525:153._x3C_gy_x3E_"
+    signal_name: "<gy>"
+  - id: "blk_3525:69.y5 -> blk_3525:153._x3C_gx_x3E_"
+    signal_name: "<gx>"
+  - id: "blk_3525:69.y4 -> blk_3525:153._x3C_nYaw_x3E_"
+    signal_name: "<nYaw>"
+  - id: "blk_3525:69.y2 -> blk_3525:153._x3C_vy_x3E_"
+    signal_name: "<vy>"
+  - id: "blk_3525:69.y1 -> blk_3525:153._x3C_vx_x3E_"
+    signal_name: "<vx>"
+  - id: "blk_3525:60.y1 -> blk_3525:69.u1"
+
+block_type_descriptions: 
+  BusCreator: Combine signals into bus
+  BusSelector: Select signals from bus
+  DataTypeConversion: Convert input signal to specified data type
+  RateTransition: Transfer data between blocks operating at different sample rates
+  SubSystem: Group blocks into subsystem for model hierarchy
+  Delay: "Delay discrete-time input by specified number of samples"
+
+BLOCK sm_car/Controller/TrqVec_FLC_V3/Power Control SID 4253:10
+  5×1 struct array with fields:
+
+    Type
+    Position
+    SrcBlock
+    SrcPort
+    DstBlock
+    DstPort
+
+status: ok
+model: sm_car
+scope: "blk_4253:10"
+token_estimate: 18
+
+
+BLOCK sm_car/Controller/TrqVec_FLC_V3/Power Control/UKF State Estimation SID 4253:1347
+  4×1 struct array with fields:
+
+    Type
+    Position
+    SrcBlock
+    SrcPort
+    DstBlock
+    DstPort
+
+status: ok
+model: sm_car
+scope: "blk_4253:1347"
+token_estimate: 4204
+blocks: 
+  interface: 
+    Inport: 
+      - id: "blk_4253:1348" #u1
+        Name: aSteerWheel
+      - id: "blk_4253:1349" #u2
+        Name: VehBus
+    Outport: 
+      - id: "blk_4253:1484" #y1
+        Name: StateEst
+      - id: "blk_4253:1485" #y2
+        Name: Out Bus Element
+      - id: "blk_4253:1486" #y2
+        Name: Out Bus Element1
+      - id: "blk_4253:1487" #y2
+        Name: Out Bus Element2
+  algorithm: 
+    - id: "blk_4253:1490"
+      Name: Activation Threshold
+      BlockType: SubSystem
+      derived_info: 
+        expression: "Enable = Activation Threshold(vx) where vx=blk_4253:1351.y1"
+      blocks: 
+        interface: 
+          Inport: 
+            - id: "blk_4253:1491" #u1
+              Name: vx
+          Outport: 
+            - id: "blk_4253:1492" #y1
+              Name: Enable
+        algorithm: 
+          - id: "blk_4253:1352"
+            Name: |
+              Compare
+              To Constant
+            BlockType: CompareToConstant
+            derived_info: 
+              expression: "y1 = (u1 >= const) where u1=blk_4253:1491.y1, const=0.4"
+            ReferenceBlock: simulink/Logic and Bit Operations/Compare To Constant
+          - id: "blk_4253:1357"
+            Name: Rate Transition3
+            BlockType: RateTransition
+            derived_info: 
+              expression: "y1 = RateTransition(u1) where u1=blk_4253:1352.y1"
+      connections: 
+        - id: "blk_4253:1352.y1 -> blk_4253:1357.u1"
+        - id: "blk_4253:1357.y1 -> blk_4253:1492.u1"
+        - id: "blk_4253:1491.y1 -> blk_4253:1352.u1"
+    - id: "blk_4253:1350"
+      Name: |
+        Bus
+        Creator
+      BlockType: BusCreator
+      derived_info: 
+        expression: "y1 = BusCreator(u1, u2, u3, u4, u5, u6) where u1=blk_4253:1354.y1, u2=blk_4253:1354.y2, u3=blk_4253:1354.y3, u4=blk_4253:1354.y4, u5=blk_4253:1354.y5, u6=blk_4253:1354.y6"
+    - id: "blk_4253:1351"
+      Name: |
+        Bus
+        Selector
+      BlockType: BusSelector
+      derived_info: 
+        expression: "[y1, y2, y3, y4, y5, y6, y7, y8, y9, y10, y11, y12] = BusSelector(u1) where u1=blk_4253:1349.y1"
+    - id: "blk_4253:1353"
+      Name: Data Type Conversion
+      BlockType: DataTypeConversion
+      derived_info: 
+        expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1475.xhat"
+    - id: "blk_4253:1354"
+      Name: Demux
+      BlockType: Demux
+      derived_info: 
+        expression: "[y1, y2, y3, y4, y5, y6] = u1 where u1=blk_4253:1353.y1"
+    - id: "blk_4253:1355"
+      Name: Rate Transition1
+      BlockType: RateTransition
+      derived_info: 
+        expression: "y1 = RateTransition(u1) where u1=blk_4253:1358.p_Inputs"
+    - id: "blk_4253:1356"
+      Name: Rate Transition2
+      BlockType: RateTransition
+      derived_info: 
+        expression: "y1 = RateTransition(u1) where u1=blk_4253:1358.Meas"
+    - id: "blk_4253:1358"
+      Name: Sensor Noise Simulation
+      BlockType: SubSystem
+      derived_info: 
+        expression: "[p_Inputs, Meas] = Sensor Noise Simulation(p__x3C_vx_x3E_, p__x3C_vy_x3E_, p__x3C_vz_x3E_, p__x3C_aYaw_x3E_, p__x3C_nYaw_x3E_, p__x3C_gx_x3E_, p__x3C_gy_x3E_, p__x3C_w_fl_x3E_, p__x3C_w_fr_x3E_, p__x3C_w_rl_x3E_, p__x3C_w_rr_x3E_, delta) where p__x3C_vx_x3E_=blk_4253:1351.y2, p__x3C_vy_x3E_=blk_4253:1351.y3, p__x3C_vz_x3E_=blk_4253:1351.y4, p__x3C_aYaw_x3E_=blk_4253:1351.y5, p__x3C_nYaw_x3E_=blk_4253:1351.y6, p__x3C_gx_x3E_=blk_4253:1351.y7, p__x3C_gy_x3E_=blk_4253:1351.y8, p__x3C_w_fl_x3E_=blk_4253:1351.y9, p__x3C_w_fr_x3E_=blk_4253:1351.y10, p__x3C_w_rl_x3E_=blk_4253:1351.y11, p__x3C_w_rr_x3E_=blk_4253:1351.y12, delta=blk_4253:1348.y1"
+      blocks: 
+        interface: 
+          Inport: 
+            - id: "blk_4253:1359" #u1
+              Name: "<vx>"
+            - id: "blk_4253:1360" #u2
+              Name: "<vy>"
+            - id: "blk_4253:1361" #u3
+              Name: "<vz>"
+            - id: "blk_4253:1362" #u4
+              Name: "<aYaw>"
+            - id: "blk_4253:1363" #u5
+              Name: "<nYaw>"
+            - id: "blk_4253:1364" #u6
+              Name: "<gx>"
+            - id: "blk_4253:1365" #u7
+              Name: "<gy>"
+            - id: "blk_4253:1366" #u8
+              Name: "<w_fl>"
+            - id: "blk_4253:1367" #u9
+              Name: "<w_fr>"
+            - id: "blk_4253:1368" #u10
+              Name: "<w_rl>"
+            - id: "blk_4253:1369" #u11
+              Name: "<w_rr>"
+            - id: "blk_4253:1370" #u12
+              Name: delta
+          Outport: 
+            - id: "blk_4253:1473" #y1
+              Name: Inputs
+            - id: "blk_4253:1474" #y2
+              Name: Meas
+        algorithm: 
+          - id: "blk_4253:1371"
+            Name: Atan2
+            BlockType: Trigonometry
+            derived_info: 
+              expression: "y1 = Trigonometry(u1, u2) where u1=blk_4253:1360.y1, u2=blk_4253:1359.y1"
+          - id: "blk_4253:1372"
+            Name: |
+              Bus
+              Creator
+            BlockType: BusCreator
+            derived_info: 
+              expression: "y1 = BusCreator(u1, u2, u3, u4, u5) where u1=blk_4253:1383.y1, u2=blk_4253:1381.y1, u3=blk_4253:1382.y1, u4=blk_4253:1384.y1, u5=blk_4253:1376.y1"
+          - id: "blk_4253:1373"
+            Name: |
+              Bus
+              Creator1
+            BlockType: BusCreator
+            derived_info: 
+              expression: "y1 = BusCreator(u1, u2, u3, u4, u5, u6) where u1=blk_4253:1374.y1, u2=blk_4253:1375.y1, u3=blk_4253:1377.y1, u4=blk_4253:1378.y1, u5=blk_4253:1379.y1, u6=blk_4253:1380.y1"
+          - id: "blk_4253:1374"
+            Name: Data Type Conversion
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1445.V_GPS_n"
+          - id: "blk_4253:1375"
+            Name: Data Type Conversion1
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1385.y"
+          - id: "blk_4253:1376"
+            Name: Data Type Conversion10
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1438.omega_rr"
+          - id: "blk_4253:1377"
+            Name: Data Type Conversion2
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1386.y"
+          - id: "blk_4253:1378"
+            Name: Data Type Conversion3
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1466.nYaw_n"
+          - id: "blk_4253:1379"
+            Name: Data Type Conversion4
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1403.a_x_n"
+          - id: "blk_4253:1380"
+            Name: Data Type Conversion5
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1410.a_y_n"
+          - id: "blk_4253:1381"
+            Name: Data Type Conversion6
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1417.omega_rl"
+          - id: "blk_4253:1382"
+            Name: Data Type Conversion7
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1424.omega_rr"
+          - id: "blk_4253:1383"
+            Name: Data Type Conversion8
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1370.y1"
+          - id: "blk_4253:1384"
+            Name: Data Type Conversion9
+            BlockType: DataTypeConversion
+            derived_info: 
+              expression: "y1 = DataTypeConversion(u1) where u1=blk_4253:1431.omega_rl"
+          - id: "blk_4253:1385"
+            Name: MATLAB Function1
+            BlockType: MATLABFunction
+            derived_info: 
+              expression: |
+                function y = wrapToPiLocal(u)
+                %#codegen
+                y = atan2(sin(u), cos(u));
+                end
+          - id: "blk_4253:1386"
+            Name: MATLAB Function2
+            BlockType: MATLABFunction
+            derived_info: 
+              expression: |
+                function y = wrapToPiLocal(u)
+                %#codegen
+                y = atan2(sin(u), cos(u));
+                end
+          - id: "blk_4253:1387"
+            Name: Unwrap
+            BlockType: "S-Function"
+            FunctionName: sdspunwrap2
+            code_file: "binary (MEX) - source not available"
+            derived_info: 
+              expression: "y1 = S-Function(u1) where u1=blk_4253:1362.y1"
+          - id: "blk_4253:1388"
+            Name: Unwrap1
+            BlockType: "S-Function"
+            FunctionName: sdspunwrap2
+            code_file: "binary (MEX) - source not available"
+            derived_info: 
+              expression: "y1 = S-Function(u1) where u1=blk_4253:1371.y1"
+          - id: "blk_4253:1389"
+            Name: noise COG
+            BlockType: SubSystem
+            derived_info: 
+              expression: "COG_n = noise COG(p__x3C_vx_x3E_, p__x3C_COG_x3E_) where p__x3C_vx_x3E_=blk_4253:1445.V_GPS_n, p__x3C_COG_x3E_=blk_4253:1388.y1"
+          - id: "blk_4253:1403"
+            Name: noise a_x
+            BlockType: SubSystem
+            derived_info: 
+              expression: "a_x_n = noise a_x(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1364.y1"
+          - id: "blk_4253:1410"
+            Name: noise a_y
+            BlockType: SubSystem
+            derived_info: 
+              expression: "a_y_n = noise a_y(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1365.y1"
+          - id: "blk_4253:1417"
+            Name: noise omega_fl
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rl = noise omega_fl(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1366.y1"
+          - id: "blk_4253:1424"
+            Name: noise omega_fr
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rr = noise omega_fr(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1367.y1"
+          - id: "blk_4253:1431"
+            Name: noise omega_rl
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rl = noise omega_rl(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1368.y1"
+          - id: "blk_4253:1438"
+            Name: noise omega_rr
+            BlockType: SubSystem
+            derived_info: 
+              expression: "omega_rr = noise omega_rr(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1369.y1"
+          - id: "blk_4253:1445"
+            Name: noise v_gps
+            BlockType: SubSystem
+            derived_info: 
+              expression: "V_GPS_n = noise v_gps(p__x3C_vz_x3E_, p__x3C_vx_x3E_, p__x3C_vy_x3E_) where p__x3C_vz_x3E_=blk_4253:1361.y1, p__x3C_vx_x3E_=blk_4253:1359.y1, p__x3C_vy_x3E_=blk_4253:1360.y1"
+          - id: "blk_4253:1459"
+            Name: noise yaw
+            BlockType: SubSystem
+            derived_info: 
+              expression: "aYaw_n = noise yaw(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1387.y1"
+          - id: "blk_4253:1466"
+            Name: noise yaw rate
+            BlockType: SubSystem
+            derived_info: 
+              expression: "nYaw_n = noise yaw rate(p__x3C_w_x3E_) where p__x3C_w_x3E_=blk_4253:1363.y1"
+      connections: 
+        - id: "blk_4253:1386.y -> blk_4253:1377.u1"
+        - id: "blk_4253:1385.y -> blk_4253:1375.u1"
+        - id: "blk_4253:1445.V_GPS_n -> blk_4253:1389._x3C_vx_x3E_,blk_4253:1374.u1"
+        - id: "blk_4253:1388.y1 -> blk_4253:1389._x3C_COG_x3E_"
+        - id: "blk_4253:1387.y1 -> blk_4253:1459._x3C_w_x3E_"
+        - id: "blk_4253:1376.y1 -> blk_4253:1372.u5"
+          signal_name: omega_rr_n
+        - id: "blk_4253:1384.y1 -> blk_4253:1372.u4"
+          signal_name: omega_rl_n
+        - id: "blk_4253:1383.y1 -> blk_4253:1372.u1"
+          signal_name: delta
+        - id: "blk_4253:1382.y1 -> blk_4253:1372.u3"
+          signal_name: omega_fr_n
+        - id: "blk_4253:1381.y1 -> blk_4253:1372.u2"
+          signal_name: omega_fl_n
+        - id: "blk_4253:1380.y1 -> blk_4253:1373.u6"
+          signal_name: a_y_n
+        - id: "blk_4253:1379.y1 -> blk_4253:1373.u5"
+          signal_name: a_x_n
+        - id: "blk_4253:1378.y1 -> blk_4253:1373.u4"
+          signal_name: nYaw_n
+        - id: "blk_4253:1377.y1 -> blk_4253:1373.u3"
+          signal_name: aYaw_n
+        - id: "blk_4253:1375.y1 -> blk_4253:1373.u2"
+          signal_name: COG_n
+        - id: "blk_4253:1374.y1 -> blk_4253:1373.u1"
+          signal_name: V_GPS_n
+        - id: "blk_4253:1361.y1 -> blk_4253:1445._x3C_vz_x3E_"
+        - id: "blk_4253:1373.y1 -> blk_4253:1474.u1"
+        - id: "blk_4253:1424.omega_rr -> blk_4253:1382.u1"
+        - id: "blk_4253:1369.y1 -> blk_4253:1438._x3C_w_x3E_"
+        - id: "blk_4253:1438.omega_rr -> blk_4253:1376.u1"
+        - id: "blk_4253:1365.y1 -> blk_4253:1410._x3C_w_x3E_"
+        - id: "blk_4253:1360.y1 -> blk_4253:1445._x3C_vy_x3E_,blk_4253:1371.u1"
+        - id: "blk_4253:1368.y1 -> blk_4253:1431._x3C_w_x3E_"
+        - id: "blk_4253:1371.y1 -> blk_4253:1388.u1"
+          signal_name: COG
+        - id: "blk_4253:1466.nYaw_n -> blk_4253:1378.u1"
+        - id: "blk_4253:1431.omega_rl -> blk_4253:1384.u1"
+        - id: "blk_4253:1372.y1 -> blk_4253:1473.u1"
+        - id: "blk_4253:1410.a_y_n -> blk_4253:1380.u1"
+        - id: "blk_4253:1417.omega_rl -> blk_4253:1381.u1"
+        - id: "blk_4253:1359.y1 -> blk_4253:1445._x3C_vx_x3E_,blk_4253:1371.u2"
+        - id: "blk_4253:1389.COG_n -> blk_4253:1385.u"
+        - id: "blk_4253:1459.aYaw_n -> blk_4253:1386.u"
+        - id: "blk_4253:1403.a_x_n -> blk_4253:1379.u1"
+        - id: "blk_4253:1362.y1 -> blk_4253:1387.u1"
+        - id: "blk_4253:1364.y1 -> blk_4253:1403._x3C_w_x3E_"
+        - id: "blk_4253:1367.y1 -> blk_4253:1424._x3C_w_x3E_"
+        - id: "blk_4253:1363.y1 -> blk_4253:1466._x3C_w_x3E_"
+        - id: "blk_4253:1366.y1 -> blk_4253:1417._x3C_w_x3E_"
+        - id: "blk_4253:1370.y1 -> blk_4253:1383.u1"
+    - id: "blk_4253:1475"
+      Name: Subsystem
+      BlockType: SubSystem
+      derived_info: 
+        control_ports: 
+          u3: enable
+        expression: "xhat = Subsystem(StateTransitionFcnInputs, y1) where StateTransitionFcnInputs=blk_4253:1355.y1, y1=blk_4253:1356.y1"
+      blocks: 
+        interface: 
+          Inport: 
+            - id: "blk_4253:1476" #u1
+              Name: StateTransitionFcnInputs
+            - id: "blk_4253:1477" #u2
+              Name: y1
+          Outport: 
+            - id: "blk_4253:1483" #y1
+              Name: xhat
+          EnablePort: 
+            - id: "blk_4253:1478"
+              Name: Enable
+        algorithm: 
+          - id: "blk_4253:1479"
+            Name: Adaptive Covariance
+            BlockType: MATLABFunction
+            derived_info: 
+              expression: |
+                function R= fcn(xhat)
+                
+                vx_safe = max(abs(xhat(1)), 1e-3);
+                
+                if vx_safe < 2.0
+                    R_cog = single(1e6);
+                else
+                    R_cog = single((0.01 / vx_safe)^2);
+                end
+                
+                R = single(diag([1e-3, R_cog, 5e-4, 1e-4, 1e-2, 1e-2]));
+          - id: "blk_4253:1480"
+            Name: Constant
+            BlockType: Constant
+            derived_info: 
+              expression: "y1 = Value where Value=[0 0 0 0 0]"
+          - id: "blk_4253:1481"
+            Name: Delay
+            BlockType: Delay
+            derived_info: 
+              expression: "y1 = Delay(u1) where u1=blk_4253:1482.y1"
+          - id: "blk_4253:1482"
+            Name: Unscented Kalman Filter
+            BlockType: UnscentedKalmanFilter
+            derived_info: 
+              expression: "y1 = UnscentedKalmanFilter(u1, u2, u3, u4) where u1=blk_4253:1476.y1, u2=blk_4253:1477.y1, u3=blk_4253:1479.R, u4=blk_4253:1480.y1"
+            ReferenceBlock: sharedTrackingLibrary/Unscented Kalman Filter
+      connections: 
+        - id: "blk_4253:1481.y1 -> blk_4253:1479.xhat"
+        - id: "blk_4253:1479.R -> blk_4253:1482.u3"
+        - id: "blk_4253:1480.y1 -> blk_4253:1482.u4"
+        - id: "blk_4253:1476.y1 -> blk_4253:1482.u1"
+        - id: "blk_4253:1482.y1 -> blk_4253:1483.u1,blk_4253:1481.u1"
+        - id: "blk_4253:1477.y1 -> blk_4253:1482.u2"
+connections: 
+  - id: "blk_4253:1490.Enable -> blk_4253:1475.enable"
+  - id: "blk_4253:1351.y1 -> blk_4253:1490.vx"
+    signal_name: "<vx>"
+  - id: "blk_4253:1475.xhat -> blk_4253:1353.u1"
+  - id: "blk_4253:1356.y1 -> blk_4253:1475.y1"
+  - id: "blk_4253:1355.y1 -> blk_4253:1475.StateTransitionFcnInputs"
+  - id: "blk_4253:1354.y6 -> blk_4253:1350.u6"
+    signal_name: a_y
+  - id: "blk_4253:1354.y5 -> blk_4253:1350.u5"
+    signal_name: a_x
+  - id: "blk_4253:1354.y4 -> blk_4253:1350.u4"
+    signal_name: phi_dot
+  - id: "blk_4253:1354.y3 -> blk_4253:1350.u3"
+    signal_name: phi
+  - id: "blk_4253:1354.y2 -> blk_4253:1350.u2"
+    signal_name: v_y
+  - id: "blk_4253:1354.y1 -> blk_4253:1350.u1"
+    signal_name: v_x
+  - id: "blk_4253:1350.y1 -> blk_4253:1484.u1,blk_4253:1487.u1"
+    signal_name: UKF
+  - id: "blk_4253:1353.y1 -> blk_4253:1354.u1"
+  - id: "blk_4253:1351.y4 -> blk_4253:1358._x3C_vz_x3E_"
+    signal_name: "<vz>"
+  - id: "blk_4253:1358.Inputs -> blk_4253:1355.u1,blk_4253:1486.u1"
+    signal_name: Input
+  - id: "blk_4253:1358.Meas -> blk_4253:1356.u1,blk_4253:1485.u1"
+    signal_name: Measument
+  - id: "blk_4253:1348.y1 -> blk_4253:1358.delta"
+  - id: "blk_4253:1351.y12 -> blk_4253:1358._x3C_w_rr_x3E_"
+    signal_name: "<w>"
+  - id: "blk_4253:1351.y11 -> blk_4253:1358._x3C_w_rl_x3E_"
+    signal_name: "<w>"
+  - id: "blk_4253:1351.y10 -> blk_4253:1358._x3C_w_fr_x3E_"
+    signal_name: "<w>"
+  - id: "blk_4253:1351.y9 -> blk_4253:1358._x3C_w_fl_x3E_"
+    signal_name: "<w>"
+  - id: "blk_4253:1351.y8 -> blk_4253:1358._x3C_gy_x3E_"
+    signal_name: "<gy>"
+  - id: "blk_4253:1351.y7 -> blk_4253:1358._x3C_gx_x3E_"
+    signal_name: "<gx>"
+  - id: "blk_4253:1351.y6 -> blk_4253:1358._x3C_nYaw_x3E_"
+    signal_name: "<nYaw>"
+  - id: "blk_4253:1351.y5 -> blk_4253:1358._x3C_aYaw_x3E_"
+    signal_name: "<aYaw>"
+  - id: "blk_4253:1351.y3 -> blk_4253:1358._x3C_vy_x3E_"
+    signal_name: "<vy>"
+  - id: "blk_4253:1351.y2 -> blk_4253:1358._x3C_vx_x3E_"
+    signal_name: "<vx>"
+  - id: "blk_4253:1349.y1 -> blk_4253:1351.u1"
+
+block_type_descriptions: 
+  SubSystem: Group blocks into subsystem for model hierarchy
+  RateTransition: Transfer data between blocks operating at different sample rates
+  BusCreator: Combine signals into bus
+  BusSelector: Select signals from bus
+  DataTypeConversion: Convert input signal to specified data type
+  Trigonometry: "Apply trigonometric function (sin, cos, tan, asin, acos, atan, atan2, sinh, cosh, tanh, asinh, acosh, atanh)"
+  Delay: "Delay discrete-time input by specified number of samples"
+  EnablePort: Control execution of subsystem with external enable signal
+[Warning: Unable to close the model 'sm_car' because it has been changed. To
+save changes, use close_system('sm_car',1). To discard changes, use
+close_system('sm_car',0).] 
