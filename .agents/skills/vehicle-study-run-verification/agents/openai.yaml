@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Run Verification"
+  short_description: "Verify run evidence, effective inputs and real exports"

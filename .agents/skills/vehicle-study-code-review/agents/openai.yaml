@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Code Review"
+  short_description: "Review frozen code checkpoints and flag concrete issues"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Plotting"
+  short_description: "Build clear plots, metrics and historical previews"

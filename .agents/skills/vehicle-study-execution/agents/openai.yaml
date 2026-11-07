@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Execution"
+  short_description: "Run approved validation and full simulation stages"

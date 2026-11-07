@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Parallel Setup"
+  short_description: "Design isolated workers for requested parallel support"

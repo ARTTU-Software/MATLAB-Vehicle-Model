@@ -1,8 +1,8 @@
 # Model and workspace inventory
 
-This is the shared model/workspace guide. Refresh this file and `inventory/saved/` in place as sources change; do not copy them into study folders. See [WORKFLOW.md](WORKFLOW.md#storage-and-retention) for final-study and failure-log retention.
+This shared record owns model-specific mappings, provenance and dated study history. [Model lookup](../.agents/skills/vehicle-model-lookup/SKILL.md) owns freshness/refresh policy; [AGENTS.md](../AGENTS.md) and the routed skills own current workflow instructions. [Preview provenance](preview_data/README.md) is maintained separately.
 
-Preview data uses only the shared `preview_data/skidpad_workspace_2026-10-23.mat` archive. Select the needed logged signals directly in memory; do not save separate preview signal datasets or study-local copies. See `preview_data/README.md`.
+Read dates and configuration identities before reusing an entry. Present-tense statements, pending checks, parameter choices, waivers and approvals in dated records describe that point in the history; later paragraphs may record their resolution. They are not current instructions or new execution permission. Some superseded attempt paths no longer exist. Retain their evidence and apply current skills when preparing new work.
 
 ## Constant Steer replacement requested 2026-10-24
 
@@ -144,7 +144,7 @@ An offline inventory was generated on 2026-10-22 from saved project files and re
 - [Saved-file fingerprints](inventory/saved/fingerprints.json)
 - [Inspector usage and scope](tools/README.md)
 
-The initial completed export records 151 saved model/library files, 44,199 block definitions and 34,889 connection records. `sm_car.slx` itself contains 4,036 directly stored block records across 412 system XML members. Counts include all project alternatives and inspected library definitions, not the compiled/instantiated size of `sm_car`.
+The initial 2026-10-22 export (historical counts; use generated coverage/manifest for a later snapshot) records 151 saved model/library files, 44,199 block definitions and 34,889 connection records. `sm_car.slx` itself contains 4,036 directly stored block records across 412 system XML members. Counts include all project alternatives and inspected library definitions, not the compiled/instantiated size of `sm_car`.
 
 The variable index contains 14,805 records, including structural records and assignments; this is not a count of unique base-workspace variables. Small readable values up to 100 elements are retained. Stored expressions and source statements are not evaluated. Runtime initialization, variable scoping/resolution, active variants and signal availability remain unverified.
 
@@ -154,7 +154,7 @@ The scan indexes 317 source records and eight workbooks. Fifteen missing referen
 
 The records below predate the saved-file inventory and are retained as historical context only. Do not combine their live values with saved-file results or treat them as authorization to access MATLAB.
 
-Partial live refresh, 2026-10-22 10:53 Europe/Bucharest, during a preparation-only workflow rehearsal. No simulation, model update/compile, startup, or scenario setup was executed. This remains an incomplete inventory and must be completed for the selected saved-file baseline before execution according to [WORKFLOW.md](WORKFLOW.md).
+Partial live refresh, 2026-10-22 10:53 Europe/Bucharest, during what was then called a preparation-only workflow rehearsal. No simulation, model update/compile, startup, or scenario setup was executed. This historical partial live inventory does not define today's Markdown-only rehearsal scope or supersede the later saved-file inventory.
 
 ### Live observations from the rehearsal
 
@@ -167,7 +167,7 @@ Partial live refresh, 2026-10-22 10:53 Europe/Bucharest, during a preparation-on
 - Logging candidate for the selected output: `logsout_sm_car.get('VehBus').Values.World.vx`, scaled by 3.6 for signed km/h, pending unit/type/availability validation. Live SignalLoggingName is `logsout_sm_car`, ReturnWorkspaceOutputs is `off`; a future runner must explicitly capture outputs instead of relying on old base results.
 - User selected saved files on disk, including saved local edits, for a future baseline. The live dirty model/workspace is not that baseline. Isolation and initialization code are not yet implemented or validated. Disk hashes cannot fingerprint unsaved live state.
 
-Rehearsal plan and provenance: [2026-10-22 Ramp Steer workflow trial](studies/2026-10-22_ramp-steer-workflow-trial/study_plan.md). No execution approval was requested or granted.
+Original rehearsal plan path: `studies/2026-10-22_ramp-steer-workflow-trial/study_plan.md` (no longer present). The observations above retain its historical context; no execution approval was requested or granted.
 
 Project-relative paths are used for portability. Live workspace values, active variants, mask parameters, dependency fingerprints, and runtime signal availability remain unverified. Project-specific maneuver sequence commands are sourced from the top-level hyperlinks; their runtime effects still need short validation for each study.
 
@@ -288,9 +288,7 @@ transcript was verified in final
 `logs/initial_validation_failed_2026-10-25_195833_409.log`. Original model,
 library and chassis workbook files were not changed by the study.
 
-Before preparing each study, read this file first. Use the input index and recorded hierarchy/workspace/source mappings to find requested targets. Check the selected baseline/configuration and relevant fingerprints, refresh only changed or missing sections and their dependencies, and write the resolved mappings back here. Reuse unchanged sections; do not rediscover the entire model for each request. An absent or incomplete inventory needs initial completion, and a broadly invalidated inventory needs rebuilding.
-
-For a Markdown-only workflow rehearsal, describe these checks without accessing MATLAB or the model. The partial observations above do not constitute a completed saved-file inventory.
+The [lookup procedure](../.agents/skills/vehicle-model-lookup/references/procedure.md) owns how these mappings are checked and refreshed. The dated discovery and later verification records above remain distinct evidence.
 
 ### Searchable input index — initial entries, coverage incomplete
 
@@ -307,7 +305,7 @@ For a Markdown-only workflow rehearsal, describe these checks without accessing 
 | Ramp Steer steering rise time / start time / final duration | Arguments 5 / 6 / 7 of the same generator | seconds; recorded values 0.1 / 10 / 8 | Override before generation; final-duration documentation/implementation mismatch recorded above |
 | Torque vectoring parameters, active controller parameters | Base workspace `Control.TrqVec`; individual parameter fields not yet indexed | `sm_car_import_control_param` and named parameter functions | Resolve the requested parameter's exact field, units, active variant, dependencies and effective-value readback before use |
 
-Add each newly resolved input here with its full target and source mapping, applicable configuration, units, class/shape, verification status, override stage, dependencies, readback and restoration method. Expand the structural sections as required; this initial index does not claim to cover every possible input. Use the logging section below as the output lookup index.
+This initial index has incomplete coverage. Add resolved mappings under the [lookup recording procedure](../.agents/skills/vehicle-model-lookup/references/procedure.md); the logging section below is the output index.
 
 ## Project entry point records
 
@@ -343,7 +341,7 @@ Startup uses `clear` and performs compilation/setup side effects. Do not rerun i
 
 ## Scenario hyperlinks observed in the saved model
 
-Re-read the current top-level hyperlinks before use. These entries describe the saved model inspected on the date above; unsaved model changes could differ. Each preparation action precedes its maneuver call.
+These entries describe the saved model at inspection time, not unsaved state. Follow the [lookup freshness rule](../.agents/skills/vehicle-model-lookup/references/procedure.md#scope-and-lookup): reuse reliably unchanged records and refresh changed/missing scopes when authorized. The recorded preparation commands precede the corresponding maneuver calls at execution.
 
 | UI label | Preparation | Maneuver argument to `sm_car_config_maneuver('sm_car', ...)` |
 | --- | --- | --- |
@@ -365,7 +363,7 @@ MDatabase.Ramp_Steer.FSAE_Achilles = ...
 sm_car_config_maneuver('sm_car','ramp steer');
 ```
 
-The user confirmed that “simulation sequence” means these project-specific maneuver sequences. Use generation/update commands from the current hyperlinks and inspect their arguments and output fields before changing sequence inputs. The Ramp Steer hyperlink is a concrete example; do not substitute a Test Sequence or Signal Editor API.
+The user confirmed that “simulation sequence” means these project-specific maneuver sequences. [Simulation code](../.agents/skills/vehicle-study-simulation-code/references/procedure.md#scenario-and-input-handling) owns their application and dependency-order procedure.
 
 ## Logging paths observed in plotting code
 
@@ -375,16 +373,11 @@ The user confirmed that “simulation sequence” means these project-specific m
 - `World.x`, `World.y`: position.
 - `Chassis.SuspA1.Steer.xRack`, `Chassis.SuspA2.Steer.xRack`: steering rack position.
 
-The plotting script accesses leaf `.Time` and `.Data`. Validate actual types, units, and availability during an approved trial. Other requested signals require inventory expansion. Do not save the entire `VehBus` when only a leaf is used.
+The plotting script accesses leaf `.Time` and `.Data`. These are source observations; [plotting](../.agents/skills/vehicle-study-plotting/SKILL.md) defines data selection and [run verification](../.agents/skills/vehicle-study-run-verification/SKILL.md) checks actual availability.
 
 ## Runtime refresh checklist
 
-- Record host OS, MATLAB release, inspection timestamp and loaded model state.
-- Inventory hierarchy, references, variants, masks and relevant callbacks.
-- Enumerate base/model workspace and dictionaries, parameter sources and dependencies.
-- Resolve the maneuver sequence's hyperlink commands, generator arguments, target database/selected-maneuver fields and restoration method.
-- Verify selected output paths and metadata, marking runtime-dependent entries pending until validation.
-- Refresh the shared inventory in place and retain only small preparation-time source hashes in each study; do not copy the inventory.
+Follow the [lookup procedure](../.agents/skills/vehicle-model-lookup/references/procedure.md) for required mapping/provenance fields and stage-limited runtime verification. Keep model-specific observations and resolved mappings in this shared guide; do not copy it into studies.
 
 ## Stop requests for future Constant Steer runs (saved-file mapping, 2026-10-25)
 
@@ -392,4 +385,4 @@ The saved sm_car fingerprint was checked against the shared inventory before tra
 
 The active runner temporarily logs those two final stop requests as `study_stop_roll` and `study_stop_lateral` in its isolated model copy, with no decimation. It labels only these two causes; other normal early endings need no classification. This wiring has saved-file verification only and awaits the next approved short runtime validation. Original study results do not contain these requests, so their specific causes must not be retrospectively inferred. The original model is not modified or saved by the refactor.
 
-Study-specific implementation is retained in study folders, not duplicate runner folders. Read retained study code, plans and known issues together with this guide before adapting future studies; check current mappings rather than assuming historical runtime settings are still effective.
+The [runner guide](runner/README.md) identifies retained implementations; [packaging](../.agents/skills/vehicle-study-packaging/SKILL.md) owns how their lessons and templates are reused.

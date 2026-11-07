@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Target Assessment"
+  short_description: "Assess target matches and explain every evaluated attempt"
