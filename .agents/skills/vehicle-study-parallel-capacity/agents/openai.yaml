@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Parallel Capacity"
+  short_description: "Assess measured RAM capacity and parallel readiness"

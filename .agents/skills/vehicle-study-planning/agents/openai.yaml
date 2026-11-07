@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Planning"
+  short_description: "Define study cases, outputs and validation coverage"

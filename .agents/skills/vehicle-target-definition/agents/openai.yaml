@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Target Definition"
+  short_description: "Define target acceptance, parameter scope and budget"

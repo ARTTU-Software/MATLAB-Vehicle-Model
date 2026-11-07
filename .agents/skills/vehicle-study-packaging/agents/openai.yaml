@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Study Packaging"
+  short_description: "Package saved sweep inputs, baselines and fresh reruns"

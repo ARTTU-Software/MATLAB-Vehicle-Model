@@ -1,5 +1,7 @@
 # Saved-file inspection tools
 
+[Model lookup](../../.agents/skills/vehicle-model-lookup/SKILL.md) owns search/freshness policy and permitted scope. This guide owns command syntax, saved-format coverage and tool verification; commands below are reference examples, not authorization to inspect or refresh data.
+
 These Python tools read saved files without starting, connecting to, or executing MATLAB. They do not run project startup, mask code, callbacks, maneuver generation, model update, or simulation. Existing user files and the live MATLAB session are not modified. Generated inventory files are written under `SimulationStudies/inventory/saved/`.
 
 The inspector also writes `fingerprints.csv` (Path, External, SHA256), a flat view of the saved-file identities for the MATLAB study scripts. External paths are absolute on the inspection host; project paths are relative. Refresh the inventory on a different execution host. The MATLAB simulation workflow does not invoke Python.
@@ -40,13 +42,15 @@ python SimulationStudies/tools/query_saved_inventory.py Vehicle.Chassis --kind p
 python SimulationStudies/tools/query_saved_inventory.py sm_car.slx --kind models
 ```
 
-Start with `inventory/saved/README.md` and `models.json`. Detailed model JSON and JSONL indexes are gzip-compressed to reduce storage; the lookup command reads them directly. Use Python `gzip.open(path, 'rt')` and `json.load` to read a complete per-model record when needed. Source/output accesses are also indexed in `sources.json`. Compression preserves every exported record.
+The query accepts a case-insensitive literal substring, not a regular expression. Supported `--kind` values are `variables`, `parameters`, `signals`, `models` and `dependencies`; `--limit` bounds displayed matches. An empty result means no indexed match, not proof the model has no such value.
+
+`inventory/saved/README.md` describes generated coverage and `models.json` is the catalog. Detailed model JSON and JSONL indexes are gzip-compressed to reduce storage; the lookup command reads them directly. Use Python `gzip.open(path, 'rt')` and `json.load` to read a complete per-model record when needed. Source/output accesses are also indexed in `sources.json`. Compression preserves every exported record.
 
 ## Refresh and integrity
 
 Every inspected file gets a SHA-256 fingerprint. Rerunning the inspector reuses unchanged model records when both their fingerprint and the inspector's own fingerprint/settings match. Source/data indexes are rebuilt from saved files, and references are resolved again against the supplied library directories. Changes to the inspector invalidate its model cache. The current `models.json` catalog identifies active records; it is authoritative over any unreferenced old files in the generated models directory.
 
-Saved hashes cannot describe unsaved MATLAB state. The agent must compare the selected baseline against these fingerprints before relying on the inventory. Missing definitions remain explicitly missing, as requested by the user on 2026-10-22; do not substitute unrelated libraries or silently change the model.
+Saved hashes exclude unsaved MATLAB state. The [lookup procedure](../../.agents/skills/vehicle-model-lookup/references/procedure.md) owns baseline comparison, targeted refresh and unresolved-reference handling.
 
 ## Verify
 

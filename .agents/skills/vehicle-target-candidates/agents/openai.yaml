@@ -1,0 +1,3 @@
+interface:
+  display_name: "Vehicle Target Candidates"
+  short_description: "Choose small adaptive steps toward an agreed target"
