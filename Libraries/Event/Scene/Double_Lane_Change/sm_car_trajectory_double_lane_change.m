@@ -17,10 +17,10 @@ gate0       = 0;     % Start
 gate1       = 50;   % Entry 1st set of cones
 gate2       = gate1+30;   % Exit  1st set of cones
 
-gate3       = gate2+5;   % Entry 2nd set of cones
+gate3       = gate2+10;   % Entry 2nd set of cones
 gate4       = gate3+30;   % Exit  2nd set of cones
 
-gate5       = gate4+5;   % Entry 3rd set of cones
+gate5       = gate4+10;   % Entry 3rd set of cones
 gate6       = gate5+30;   % Exit 3rd set of cones
 
 gate7       = gate6+30;   % End
