@@ -15,13 +15,13 @@ function traj = sm_car_traj_gen_straight_constant_speed(varargin)
 % Copyright 2018-2024 The MathWorks, Inc.
 
 % Vehicle initial speed
-initSpeed = 1;
+initSpeed = 0;
 
 % Default values if no arguments supplied
 if(nargin == 0)
     tgtSpd      = 12;    % (m/s)
     tgtDist     = NaN;   % (m), NaN means use time for target speed
-    tgtTime     =  8;    % (sec), NaN means use distance for target speed
+    tgtTime     =  5;    % (sec), NaN means use distance for target speed
     latOffset   =  0;    % (m)
     showPlot    = false;
 else
@@ -140,17 +140,9 @@ aYaw.Value = aYaw_new;
 aYaw.Units = 'rad';
 aYaw.Comments = 'Yaw Angle, non-wrapping';
 
-% If save to file is desired
-%spdstr = num2str(round(tgtSpd));
-%dststr = num2str(round(tgtDist));
-%filename = ['Straight_Constant_Speed_trajectory_' spdstr '_' dststr]
-%save(filename,'x','y','z','vx','aYaw','xTrajectory');
-
 traj.x    = x;
 traj.y    = y;
 traj.z    = z;
 traj.vx   = vx;
 traj.aYaw = aYaw;
 traj.xTrajectory = xTrajectory;
-
-

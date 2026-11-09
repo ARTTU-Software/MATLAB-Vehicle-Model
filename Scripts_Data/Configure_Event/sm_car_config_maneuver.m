@@ -303,12 +303,12 @@ switch maneuver_str
         
     % --- Straightline at constant speed
     case 'straight constant speed'
-        evalin('base',['Init = IDatabase.Double_Lane_Change.' init_inst ';']);
-        evalin('base',['Maneuver = MDatabase.Straight_Constant_Speed_12_50.' veh_inst ';']);
+        evalin('base',['Init = IDatabase.Flat.' init_inst ';']);
+        evalin('base',['Maneuver = MDatabase.Straight_Constant_Speed.' veh_inst ';']);
         set_param(drive_h,'popup_driver_type','Closed Loop');
         evalin('base',['Driver = DDatabase.Straight_Constant_Speed.' veh_inst ';']);
-        sm_car_config_road(modelname,'Road Two Lane');
-        set_param(modelname,'StopTime','25');
+        sm_car_config_road(modelname,'Plane Grid');
+        set_param(modelname,'StopTime','15');
 
 
     % --- Mallory Park Circuit, Flat (not based on CRG)
