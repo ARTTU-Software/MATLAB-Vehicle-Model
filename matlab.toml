@@ -1,0 +1,20 @@
+name = "Vehicle_Model_Analytical"
+
+[folders]
+path = [
+    "Data",
+    "Libraries/Vehicle_Models",
+    "Libraries",
+    "Data/Maneuvers_inputs",
+    "Scripts/Project",
+    "Data/Vehicle_Data",
+    "Scripts",
+]
+
+[project]
+startup-files = [
+    "Scripts/Project/proj_startup.m",
+]
+shutdown-files = [
+    "Scripts/Project/proj_shutdown.m",
+]
