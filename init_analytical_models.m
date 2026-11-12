@@ -23,8 +23,8 @@ Params.Car.Fzf_static = Params.Car.m * Params.Physics.g * (Params.Car.b / Params
 Params.Car.Fzr_static = Params.Car.m * Params.Physics.g * (Params.Car.a / Params.Car.L);
 
 % Bugetul maxim de forță pe care îl poate genera anvelopa înainte de a derapa [N]
-Params.Car.Fmax_f = Params.Physics.mu * Params.Car.Fzf_static;
-Params.Car.Fmax_r = Params.Physics.mu * Params.Car.Fzr_static;
+Params.Car.Fmax_FA = Params.Physics.mu * Params.Car.Fzf_static;
+Params.Car.Fmax_RA = Params.Physics.mu * Params.Car.Fzr_static;
 
 
 %% Initial Conditions

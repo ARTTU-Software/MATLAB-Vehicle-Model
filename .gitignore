@@ -21,13 +21,13 @@
 # Generated helpsearch folders
 helpsearch*/
 
-# Code generation folders
+# Simulink cache files and generated cache folders
+*.slxc
 slprj/
+
+# Other code generation folders
 sccprj/
 codegen/
-
-# Cache files
-*.slxc
 
 # Cloud based storage dotfile
 .MATLABDriveTag

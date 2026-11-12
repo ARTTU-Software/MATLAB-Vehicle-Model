@@ -1,5 +1,11 @@
 # Project instructions
 
+## Change scope
+
+Limit edits to what the user explicitly requests and the smallest supporting changes needed for the requested result to work. Preserve unrelated work already in the workspace. Avoid unrelated refactoring, formatting, renaming, and configuration changes. Explain any necessary supporting edits in the final response.
+
+## MATLAB and Simulink
+
 When working on MATLAB code in this repository, read the applicable rules before making changes or reviewing code.
 
 - For MATLAB code and code reviews, use [MATLAB Coding Standards](.agent-docs/rules/matlab-coding-standards.md).
