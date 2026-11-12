@@ -10,10 +10,10 @@ Car.h    = 0.358;
 Car.Izz    = 140;     % Moment de inerție pe axa Z [kg*m^2]
 
 %% 3. Parametri Anvelope (Cornering & Longitudinal)
-Car.C_af = 39672*2;     % Cornering stiffness punte față [N/rad]
-Car.C_ar = 43105*2;     % Cornering stiffness punte spate [N/rad]
+Car.C_a_FA = 39672*2;     % Cornering stiffness punte față [N/rad]
+Car.C_a_RA = 43105*2;     % Cornering stiffness punte spate [N/rad]
 
 % Așteptăm valorile exacte de la Andrei mâine; acum punem estimări (50.000)
-Car.C_kf = 39726*2;     % Longitudinal stiffness punte față [N/slip]
-Car.C_kr = 43677*2;     % Longitudinal stiffness punte spate [N/slip]
+Car.C_k_FA = 39726*2;     % Longitudinal stiffness punte față [N/slip]
+Car.C_k_RA = 43677*2;     % Longitudinal stiffness punte spate [N/slip]
 

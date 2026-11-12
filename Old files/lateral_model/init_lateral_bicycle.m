@@ -18,3 +18,7 @@ Params.Car.C_ar = 48872;    % Rear axle cornering stiffness [N/rad] (reference e
 %% 4. Operating Condition (Constant Forward Speed)
 % Dynamic bicycle model assumes constant longitudinal velocity
 Params.Sim.vx_const = 12; % Constant longitudinal speed [m/s] (~36 km/h)
+
+%% 5. Initial Conditions
+Params.Sim.vyInitial = 0; % Initial lateral velocity [m/s]
+Params.Sim.yawRateInitial = 0; % Initial yaw rate [rad/s]

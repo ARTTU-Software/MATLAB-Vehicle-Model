@@ -29,4 +29,12 @@ Params.Car.Fmax_r = Params.Physics.mu * Params.Car.Fzr_static;
 
 %% Initial Conditions
 Params.Sim.vx_init = 1;     % Viteza longitudinală de start [m/s]
+Params.Sim.vyInitial = 0;      % Initial lateral speed [m/s]
+Params.Sim.yawRateInitial = 0; % Initial yaw rate [rad/s]
+
+%% 3-DOF limits and tire force input
+Params.Sim.vxMin = 0.1;       % Minimum longitudinal speed and slip denominator [m/s]
+Params.Sim.vxMax = 40;        % Maximum longitudinal speed [m/s]
+Params.Sim.vyMaxAbs = 15;     % Maximum lateral speed magnitude [m/s]
+Params.Sim.frontLongitudinalForce = 0; % Ideal front longitudinal tire force [N]
 
