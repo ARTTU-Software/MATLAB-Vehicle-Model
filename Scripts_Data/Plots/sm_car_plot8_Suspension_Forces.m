@@ -1,5 +1,5 @@
-function sm_car_plot8_Suspension_Forces(out,Maneuver)
-VehBus = out.logsout_sm_car.get('VehBus');
+function sm_car_plot8_Suspension_Forces(out,Maneuver,tout)
+VehBus = out.get('VehBus');
 VehBus = VehBus.Values.Chassis;
 
 Aarm = {'UpperWishbone', 'LowerWishbone'};
@@ -58,7 +58,7 @@ for i=1:2
 end
 
 Forces_MinMax_export(AarmForces, UprForces, PushrodForces, TrackrodForces, Maneuver.Type);
-viewForcesGUI(AarmForces, UprForces, PushrodForces, TrackrodForces, out.tout, Maneuver.Type);
+viewForcesGUI(AarmForces, UprForces, PushrodForces, TrackrodForces, tout, Maneuver.Type);
 
 %% Export Function
 function Forces_MinMax_export(Aarm,Upr,Pushrod, Trackrod,Maneuver)
