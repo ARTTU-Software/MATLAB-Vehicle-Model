@@ -1,4 +1,9 @@
-function sm_car_plot8_Suspension_Forces(out,Maneuver,tout)
+function sm_car_plot8_Suspension_Forces(out,Maneuver,~)
+% Plot forces against their logged timestamps. The third input is optional
+% and is retained for callers that pass the simulation time vector.
+if isa(out,'Simulink.SimulationOutput')
+    out = out.get('logsout_sm_car');
+end
 VehBus = out.get('VehBus');
 VehBus = VehBus.Values.Chassis;
 
@@ -21,104 +26,61 @@ for i=1:2
         else
             mirrorY=1;
         end
+        corner = VehBus.(Axle{i}).(Link{j});
 
         for k=1:2
             for l=1:2
+                armForce = corner.(ArmF{k}).(Element{l});
                 AarmForces =[AarmForces; struct( ...
                     'Axle',(Axle{i}), ...
                     'Link',(Link(j)), ...
                     'Aarm',(Aarm{k}), ...
                     'Element',(Element{l}), ...
-                    'Faxial', VehBus.(Axle{i}).(Link{j}).(ArmF{k}).(Element{l}).Data(2,:,:))];
+                    'AxialTime', armForce.Time, ...
+                    'Faxial', armForce.Data(2,:,:))];
             end
 
+            uprightForce = corner.(Upr{k});
             UprForces =[UprForces; struct( ...
                     'Axle',(Axle{i}), ...
                     'Link',(Link(j)), ...
                     'Aarm',(Aarm{k}), ...
                     'Element',(Element{3}), ...
-                    'Fx', VehBus.(Axle{i}).(Link{j}).(Upr{k}).Data(1,:,:), ...
-                    'Fy', VehBus.(Axle{i}).(Link{j}).(Upr{k}).Data(2,:,:)*mirrorY, ...
-                    'Fz', VehBus.(Axle{i}).(Link{j}).(Upr{k}).Data(3,:,:))];
+                    'ComponentTime', uprightForce.Time, ...
+                    'Fx', uprightForce.Data(1,:,:), ...
+                    'Fy', uprightForce.Data(2,:,:)*mirrorY, ...
+                    'Fz', uprightForce.Data(3,:,:))];
         end
         PushrodForces =[PushrodForces; struct( ...
                 'Axle',(Axle{i}), ...
                 'Link',(Link(j)), ...
                 'Element','Pushrod', ...
-                'Faxial', VehBus.(Axle{i}).(Link{j}).Push_F.Data(3,:,:))];
+                'AxialTime', corner.Push_F.Time, ...
+                'Faxial', corner.Push_F.Data(3,:,:))];
         TrackrodForces =[TrackrodForces; struct( ...
                 'Axle',(Axle{i}), ...
                 'Link',(Link(j)), ...
                 'Element','Trackrod', ...
-                'Faxial', VehBus.(Axle{i}).(Link{j}).TrackRod_F.Data(3,:,:), ...
-                'Fx', VehBus.(Axle{i}).(Link{j}).UprTrack_F.Data(1,:,:), ...
-                'Fy', VehBus.(Axle{i}).(Link{j}).UprTrack_F.Data(2,:,:)*mirrorY, ...
-                'Fz', VehBus.(Axle{i}).(Link{j}).UprTrack_F.Data(3,:,:))];
+                'AxialTime', corner.TrackRod_F.Time, ...
+                'Faxial', corner.TrackRod_F.Data(3,:,:), ...
+                'ComponentTime', corner.UprTrack_F.Time, ...
+                'Fx', corner.UprTrack_F.Data(1,:,:), ...
+                'Fy', corner.UprTrack_F.Data(2,:,:)*mirrorY, ...
+                'Fz', corner.UprTrack_F.Data(3,:,:))];
     end
 end
 
 Forces_MinMax_export(AarmForces, UprForces, PushrodForces, TrackrodForces, Maneuver.Type);
-viewForcesGUI(AarmForces, UprForces, PushrodForces, TrackrodForces, tout, Maneuver.Type);
+viewForcesGUI(AarmForces, UprForces, PushrodForces, TrackrodForces, Maneuver.Type);
 
 %% Export Function
 function Forces_MinMax_export(Aarm,Upr,Pushrod, Trackrod,Maneuver)
-% --- A-arm Forces ---
-Aarm_MinMax = arrayfun(@(s) struct( ...
-    'Axle', s.Axle, ...
-    'Link', s.Link, ...
-    'Aarm', s.Aarm, ...
-    'Element', s.Element, ...
-    'maxFaxial', max(s.Faxial), ...
-    'minFaxial', min(s.Faxial)), ...
-    Aarm);
-
-% --- Upright Forces ---
-Upr_MinMax = arrayfun(@(s) struct( ...
-    'Axle', s.Axle, ...
-    'Link', s.Link, ...
-    'Aarm', s.Aarm, ...
-    'Element', s.Element, ...
-    'maxFx', max(s.Fx), ...
-    'minFx', min(s.Fx), ...
-    'maxFy', max(s.Fy), ...
-    'minFy', min(s.Fy), ...
-    'maxFz', max(s.Fz), ...
-    'minFz', min(s.Fz)), ...
-    Upr);
-
-% --- Pushrod Forces ---
-Pushrod_MinMax = arrayfun(@(s) struct( ...
-    'Axle', s.Axle, ...
-    'Link', s.Link, ...
-    'Element', s.Element, ...
-    'maxFaxial', max(s.Faxial)), ...
-    Pushrod);
-
-% --- Trackrod Forces ---
-Trackrod_MinMax = arrayfun(@(s) struct( ...
-    'Axle', s.Axle, ...
-    'Link', s.Link, ...
-    'Element', s.Element, ...
-    'maxFaxial', max(s.Faxial), ...
-    'minFaxial', min(s.Faxial), ...
-    'maxFx', max(s.Fx), ...
-    'minFx', min(s.Fx), ...
-    'maxFy', max(s.Fy), ...
-    'minFy', min(s.Fy), ...
-    'maxFz', max(s.Fz), ...
-    'minFz', min(s.Fz)), ...
-    Trackrod);
-[Aarm_MinMax.Comments, Upr_MinMax.Comments, Pushrod_MinMax.Comments, Trackrod_MinMax.Comments ] = deal('');
-Aarm_MinMax(1).Comments = 'Pozitiv e compression';
-Upr_MinMax(1).Comments = 'Fy pozitiv e orientat spre monopost, restul in sistemul de coordonate al monopostului';
-Pushrod_MinMax(1).Comments = 'Pozitiv e compression';
-Trackrod_MinMax(1).Comments = 'Faxial pozitiv e compression, Fy pozitiv e orientat spre monopost';
-
-% === Export results to Excel ===
-TAarm = struct2table(Aarm_MinMax);
-TUpr = struct2table(Upr_MinMax);
-TPush = struct2table(Pushrod_MinMax);
-TTrack = struct2table(Trackrod_MinMax);
+TAarm = extremaTable(Aarm,"Faxial",'Pozitiv e compression');
+TUpr = extremaTable(Upr,["Fx","Fy","Fz"], ...
+    'Fy pozitiv e orientat spre monopost, restul in sistemul de coordonate al monopostului');
+TPush = extremaTable(Pushrod,"Faxial",'Pozitiv e compression');
+TTrack = extremaTable(Trackrod,["Faxial","Fx","Fy","Fz"], ...
+    'Faxial pozitiv e compression, Fy pozitiv e orientat spre monopost');
 
 % === Create directory if it doesn't exist ===
 sdlreportsDir = fullfile(pwd, 'sdlreports');
@@ -135,17 +97,88 @@ writetable(TTrack, filename, 'Sheet', 'TrackrodForces');
 
 end
 
-    function viewForcesGUI(AarmForces, UprForces, PushrodForces, TrackrodForces, time, Maneuver)
+function results = extremaTable(forces, components, comment)
+    signalFields = intersect(fieldnames(forces), [cellstr(components), {'AxialTime','ComponentTime'}]);
+    results = struct2table(rmfield(forces,signalFields));
+    sampleDetails = table;
+    n = numel(forces);
+
+    for component = components
+        timeField = 'ComponentTime';
+        if component == "Faxial"
+            timeField = 'AxialTime';
+        end
+        extrema = nan(n,2);
+        sampleTimes = nan(n,2);
+        upperXYZ = nan(n,3,2);
+        lowerXYZ = nan(n,3,2);
+        for row = 1:n
+            force = forces(row);
+            values = force.(component);
+            if all(isnan(values(:)))
+                continue
+            end
+            [maximum,maxIndex] = max(values(:));
+            [minimum,minIndex] = min(values(:));
+            indices = [maxIndex,minIndex];
+            extrema(row,:) = [maximum,minimum];
+            time = force.(timeField)(:);
+            sampleTimes(row,:) = time(indices).';
+
+            corner = VehBus.(force.Axle).(force.Link);
+            upperXYZ(row,:,:) = positionAtForceSamples(corner,'UpperUprightXYZ',time,indices).';
+            lowerXYZ(row,:,:) = positionAtForceSamples(corner,'LowerUprightXYZ',time,indices).';
+        end
+        prefixes = ["max","min"] + component;
+        axesNames = ["X","Y","Z"];
+        for k = 1:2
+            prefix = prefixes(k);
+            results.(prefix) = extrema(:,k);
+            sampleDetails.(prefix + "_Time_s") = sampleTimes(:,k);
+            for axis = 1:3
+                sampleDetails.(prefix + "_Upper" + axesNames(axis) + "_m") = upperXYZ(:,axis,k);
+            end
+            for axis = 1:3
+                sampleDetails.(prefix + "_Lower" + axesNames(axis) + "_m") = lowerXYZ(:,axis,k);
+            end
+        end
+    end
+    results.Comments = repmat({''},n,1);
+    results.Comments{1} = comment;
+    results = [results, sampleDetails];
+end
+
+function xyz = positionAtForceSamples(corner, field, forceTime, indices)
+    xyz = nan(numel(indices),3);
+    if ~isfield(corner,field) || isempty(corner.(field).Time)
+        return
+    end
+    signal = corner.(field);
+    time = signal.Time(:);
+    % Logged vectors can have time along either their first or last dimension.
+    if signal.IsTimeFirst
+        data = reshape(signal.Data,numel(time),3);
+    else
+        data = reshape(signal.Data,3,numel(time)).';
+    end
+
+    if isequal(time,forceTime)
+        xyz = data(indices,:);
+        return
+    end
+    % Sample at the force timestamps when the sensors have a different time grid.
+    [time,rows] = unique(time,'last');
+    queryTime = forceTime(indices);
+    if numel(time) == 1
+        xyz(queryTime == time,:) = data(repmat(rows,nnz(queryTime == time),1),:);
+    else
+        xyz = interp1(time,data(rows,:),queryTime,'linear',NaN);
+    end
+end
+
+    function viewForcesGUI(AarmForces, UprForces, PushrodForces, TrackrodForces, Maneuver)
     % === Suspension Forces Viewer (no struct merging) ===
     f = figure('Name','Suspension Forces Viewer','Position',[200 100 950 600]);
-
-    % === Determine time vector from simulation ===
-    try
-        t = time;
-    catch
-        t = 1:size(AarmForces(1).Faxial,3); % fallback
-        warning('Time vector not found in VehBus. Using index instead.');
-    end
 
     % === Collect available options dynamically ===
     axles = unique([ {AarmForces.Axle}, {UprForces.Axle}, {PushrodForces.Axle}, {TrackrodForces.Axle} ]);
@@ -173,7 +206,7 @@ end
     uicontrol('Style','text','String','Arm (if any):',...
         'Position',[50 420 100 20],'HorizontalAlignment','left');
     ddArm = uicontrol('Style','popupmenu','String',aarms,...
-        'Position',[150 420 120 25]);
+        'Position',[150 420 120 25],'Value',2);
 
     % === Buttons ===
     uicontrol('Style','pushbutton','String','Plot Forces',...
@@ -205,8 +238,10 @@ end
         if any(strcmp({UprForces.Element}, elem))
             dataList = UprForces(strcmp({UprForces.Axle},axle) & strcmp({UprForces.Link},link) & strcmp({UprForces.Aarm},arm));
         elseif any(strcmp({PushrodForces.Element}, elem))
+            arm = 'N/A';
             dataList = PushrodForces(strcmp({PushrodForces.Axle},axle) & strcmp({PushrodForces.Link},link));
         elseif any(strcmp({TrackrodForces.Element}, elem))
+            arm = 'N/A';
             dataList = TrackrodForces(strcmp({TrackrodForces.Axle},axle) & strcmp({TrackrodForces.Link},link));
         else
             dataList = AarmForces(strcmp({AarmForces.Axle},axle) & strcmp({AarmForces.Link},link) & strcmp({AarmForces.Element},elem) & strcmp({AarmForces.Aarm},arm));
@@ -225,33 +260,17 @@ end
         legendEntries = {};
 
         % --- Plot logic ---
-        if isfield(s,'Fx') && isfield(s,'Fy') && isfield(s,'Fz') % Upright
-            plot(ax1,t,squeeze(s.Fx),'LineWidth',1.3);
-            plot(ax1,t,squeeze(s.Fy),'LineWidth',1.3);
-            plot(ax1,t,squeeze(s.Fz),'LineWidth',1.3);
-            legendEntries = {'Fx','Fy','Fz'};
-        elseif isfield(s,'Faxial') && strcmp(s.Element,'Pushrod')
-            plot(ax1,t,squeeze(s.Faxial),'LineWidth',1.5);
+        if isfield(s,'Faxial')
+            plot(ax1,s.AxialTime,s.Faxial(:),'LineWidth',1.5);
             legendEntries = {'Faxial'};
-        elseif isfield(s,'Faxial') && strcmp(s.Element,'Trackrod')
-            plot(ax1,t,squeeze(s.Faxial),'LineWidth',1.5);
-            if isfield(s,'Fy')
-                plot(ax1,t,squeeze(s.Fy),'--','LineWidth',1.3);
-                legendEntries = {'Faxial','Fy'};
-            else
-                legendEntries = {'Faxial'};
-            end
-        elseif isfield(s,'Faxial') % A-arm
-            plot(ax1,t,squeeze(s.Faxial),'LineWidth',1.5);
-            if isfield(s,'Fy')
-                plot(ax1,t,squeeze(s.Fy),'--','LineWidth',1.3);
-                legendEntries = {'Faxial','Fy'};
-            else
-                legendEntries = {'Faxial'};
-            end
-        else
-            title(ax1,'Unsupported data structure');
         end
+        if isfield(s,'ComponentTime')
+            plot(ax1,s.ComponentTime,s.Fx(:),'LineWidth',1.3);
+            plot(ax1,s.ComponentTime,s.Fy(:),'LineWidth',1.3);
+            plot(ax1,s.ComponentTime,s.Fz(:),'LineWidth',1.3);
+            legendEntries = [legendEntries, {'Fx','Fy','Fz'}];
+        end
+        hold(ax1,'off');
 
         legend(ax1,legendEntries,'Location','best');
         title(ax1,sprintf('%s - %s - %s - %s',link,axle,arm,elem));
