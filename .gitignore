@@ -26,3 +26,9 @@ codegen/
 /B2356run53_combined.mat
 /B2356run53_longitudinal.mat
 /SOC_Dej.mat
+
+# Local backups made by the scripts
+backups/
+
+# Simulink cache folder of the project
+cache/

@@ -46,8 +46,14 @@ Spring.spring_preload.value = 0.008;
 Spring.spring_preload.unit = 'm';
 Spring.damping_coeff.value = 4000;
 Spring.damping_coeff.unit = 'N*s/m';
-Spring.free_length.value = 0.25;
+Spring.free_length.value = 0.185697;
 Spring.free_length.unit = 'm';
+Tire.radius.value = 0.2665;
+Tire.radius.unit = 'm';
+Hardpoints.hp_tierod_in.value = [0.105454, 0.25, 0.126397];
+Hardpoints.hp_tierod_in.unit = 'm';
+Hardpoints.hp_tierod_out.value = [0.086252, 0.575546, 0.2065];
+Hardpoints.hp_tierod_out.unit = 'm';
 
 % Automatic Calculations for Simscape
 Hardpoints.hp_pushrod_in.value = Hardpoints.hp_bcr_pushrod.value;

@@ -2,8 +2,8 @@
 clear; clc;
 
 
-excel_file = 'Vehicle_Parameters_QuarterCar.xlsx';
-cache_file = 'cached_params.m';
+excel_file = fullfile(fileparts(mfilename('fullpath')), 'Vehicle_Parameters_QuarterCar.xlsx');
+cache_file = fullfile(fileparts(mfilename('fullpath')), 'cached_params.m');
 
 
 if ~isfile(excel_file)
