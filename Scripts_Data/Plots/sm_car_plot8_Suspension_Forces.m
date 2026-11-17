@@ -115,11 +115,12 @@ function results = extremaTable(forces, components, comment)
             if all(isnan(values(:)))
                 continue
             end
-            [maximum,maxIndex] = max(values(:));
-            [minimum,minIndex] = min(values(:));
+            time_noinit = force.(timeField)(:) > 1;
+            [maximum,maxIndex] = max(values(time_noinit));
+            [minimum,minIndex] = min(values(time_noinit));
             indices = [maxIndex,minIndex];
             extrema(row,:) = [maximum,minimum];
-            time = force.(timeField)(:);
+            time = force.(timeField)(time_noinit);
             sampleTimes(row,:) = time(indices).';
 
             corner = VehBus.(force.Axle).(force.Link);
