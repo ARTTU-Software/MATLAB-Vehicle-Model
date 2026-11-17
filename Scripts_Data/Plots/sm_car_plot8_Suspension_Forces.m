@@ -1,11 +1,8 @@
 function sm_car_plot8_Suspension_Forces(out,Maneuver,~)
 % Plot forces against their logged timestamps. The third input is optional
 % and is retained for callers that pass the simulation time vector.
-if isa(out,'Simulink.SimulationOutput')
-    out = out.get('logsout_sm_car');
-end
-VehBus = out.get('VehBus');
-VehBus = VehBus.Values.Chassis;
+plotBus = sm_car_plot_data(out);
+VehBus = plotBus.VehBus.Chassis;
 
 Aarm = {'UpperWishbone', 'LowerWishbone'};
 Axle = {'SuspA1', 'SuspA2'};

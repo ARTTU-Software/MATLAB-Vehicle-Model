@@ -1,4 +1,4 @@
-function sm_car_plot7power(logsout_data)
+function sm_car_plot7power(sim_results)
 % Code to plot simulation results from sm_car
 %% Plot Description:
 %
@@ -7,18 +7,22 @@ function sm_car_plot7power(logsout_data)
 % Copyright 2016-2024 The MathWorks, Inc.
 
 % Get simulation results
-logsout_VehBus  = logsout_data.get('VehBus');
-logsout_t       = logsout_VehBus.Values.Chassis.Body.CG.vx.Time;
-logsout_sVeh    = logsout_VehBus.Values.Chassis.Body.CG.vx.Data;
+if nargin == 0
+    sim_results = [];
+end
+plotBus = sm_car_plot_data(sim_results);
+vehBus = plotBus.VehBus;
+logsout_t       = vehBus.Chassis.Body.CG.vx.Time;
+logsout_sVeh    = vehBus.Chassis.Body.CG.vx.Data;
 
 existCurrentData = 0;
-if(isfield(logsout_VehBus.Values.Power,'Battery'))
-    logsout_battSOC = logsout_VehBus.Values.Power.Battery.SOC.Data;
-    logsout_iBatt   = logsout_VehBus.Values.Power.Battery.i.Data;
+if(isfield(vehBus.Power,'Battery'))
+    logsout_battSOC = vehBus.Power.Battery.SOC.Data;
+    logsout_iBatt   = vehBus.Power.Battery.i.Data;
     existCurrentData = 1;
 end
-if(isfield(logsout_VehBus.Values.Power,'FuelCell'))
-    logsout_iFC      = logsout_VehBus.Values.Power.FuelCell.i.Data;
+if(isfield(vehBus.Power,'FuelCell'))
+    logsout_iFC      = vehBus.Power.FuelCell.i.Data;
 end
 
 
@@ -55,7 +59,11 @@ if(existCurrentData)
     max_SOC = max(logsout_battSOC);
     min_SOC = min(logsout_battSOC);
     range_SOC = max_SOC-min_SOC;
-    SOC_scaled = (logsout_battSOC-min_SOC)*(range_y/range_SOC)+ylim(1);
+    if range_SOC > 0
+        SOC_scaled = (logsout_battSOC-min_SOC)*(range_y/range_SOC)+ylim(1);
+    else
+        SOC_scaled = repmat(mean(ylim),size(logsout_battSOC));
+    end
     set(gca,'YLim',ylim);
     plot(logsout_t,SOC_scaled,'Color',temp_colororder(5,:),'LineWidth',1);
     hold off

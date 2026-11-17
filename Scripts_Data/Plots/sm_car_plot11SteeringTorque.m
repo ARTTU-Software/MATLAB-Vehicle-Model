@@ -1,16 +1,13 @@
-function sm_car_plot11SteeringTorque()
-%sm_car_plot10_tire_force_torque  Plot tire forces and torques for all wheels
-%  sm_car_plot10_tire_force_torque(varargin)
-%  You may specify 'vehicle' or 'trailer' to select which data is plotted
-% 
+function sm_car_plot11SteeringTorque(sim_results)
+%SM_CAR_PLOT11STEERINGTORQUE Estimate steering torque from front tire loads.
 % Copyright 2018-2024 The MathWorks, Inc.
 
 
-% Check for simulation results
-logsout_sm_car = evalin('base','logsout_sm_car');
-if isempty('logsout_sm_car')
-    error('logsout_sm_car data not available.')
+if nargin == 0
+    sim_results = [];
 end
+plotBus = sm_car_plot_data(sim_results);
+vehBus = plotBus.VehBus;
 Vehicle = evalin('base','Vehicle');
 % Reuse figure if it exists, else create new figure
 fig_handle_name =   'h11_sm_car';
@@ -25,10 +22,7 @@ end
 figure(evalin('base',fig_handle_name))
 clf(evalin('base',fig_handle_name))
 
-% Get simulation results
-logsout_VehBus = logsout_sm_car.get('VehBus');
-
-chassis_log_fieldnames = fieldnames(logsout_VehBus.Values.Chassis);
+chassis_log_fieldnames = fieldnames(vehBus.Chassis);
 whl_inds = find(startsWith(chassis_log_fieldnames,'Whl'));
 whlnames = sort(chassis_log_fieldnames(whl_inds));
 
@@ -49,11 +43,11 @@ steering_trail = Vehicle.Chassis.SuspA1.Steer.Pinion.xRad.Value;
 % Plot results
 for whl_i = [1 3]
 
-    logsout_Mz(:,whl_i) = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).Mz.Data;
-    logsout_Fy(:,whl_i) = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).Fy.Data;
+    logsout_Mz(:,whl_i) = vehBus.Chassis.(whlnames{whl_i}).Mz.Data;
+    logsout_Fy(:,whl_i) = vehBus.Chassis.(whlnames{whl_i}).Fy.Data;
 
 end
-time = logsout_VehBus.Values.Chassis.(whlnames{1}).Fy.Time;
+time = vehBus.Chassis.(whlnames{1}).Fy.Time;
 
 Torque_steer = sum(logsout_Fy * mechanical_trail + logsout_Mz,2) / pitman_arm * steering_trail;
    
@@ -73,7 +67,7 @@ legend('Location','Best',FontSize=6);
 
 maneuver_str = evalin('base','Maneuver.Type');
 
-text(0,1.3,sprintf('%s, %s, %s',...
+text(0,1.3,sprintf('%s, %s',...
     strrep(maneuver_str,'_','\_'),...
     get_param(bdroot,'Solver')),...
     'Color',[1 1 1]*0.5,'Units','Normalized')

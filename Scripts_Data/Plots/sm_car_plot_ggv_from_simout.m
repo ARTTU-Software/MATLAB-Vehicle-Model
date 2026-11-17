@@ -1,42 +1,36 @@
 function [fig_h, GGV_data] = sm_car_plot_ggv_from_simout(sim_results, varargin)
 %sm_car_plot_ggv_from_simout Plot GGV mesh from sm_car simulation output
 %   [fig_h, GGV_data] = sm_car_plot_ggv_from_simout(out) extracts body
-%   accelerations and vehicle speed from out.logsout_sm_car, then calls
+%   accelerations and vehicle speed from the OutBus output, then calls
 %   sm_car_plot_ggv_mesh_from_points.
 %
-%   [fig_h, GGV_data] = sm_car_plot_ggv_from_simout(logsout_sm_car) uses a
-%   logged Simulink.SimulationData.Dataset directly.
+%   The input can also be a logged dataset or the OutBus values.
 %
-%   [fig_h, GGV_data] = sm_car_plot_ggv_from_simout() reads out or
-%   logsout_sm_car from the base workspace.
+%   [fig_h, GGV_data] = sm_car_plot_ggv_from_simout() uses the current
+%   simulation output from the workspace.
 %
 %   Extra Name, Value pairs are passed to sm_car_plot_ggv_mesh_from_points.
 
 % Copyright 2026 The MathWorks, Inc.
 
 if nargin == 0
-    sim_results = getBaseSimulationResults();
+    sim_results = [];
 elseif isNameValueStart(sim_results)
     varargin = [{sim_results} varargin];
-    sim_results = getBaseSimulationResults();
-elseif isempty(sim_results)
-    sim_results = getBaseSimulationResults();
+    sim_results = [];
 end
 
-logsout_sm_car = getLogsoutSmCar(sim_results);
-logsout_VehBus = logsout_sm_car.get('VehBus');
-if isempty(logsout_VehBus)
-    error('VehBus was not found in logsout_sm_car.');
-end
+plotBus = sm_car_plot_data(sim_results);
+vehBus = plotBus.VehBus;
 
 [logsout_vxVeh, speed_x_signal] = getLoggedSignal( ...
-    logsout_VehBus.Values, {'Chassis.Body.CG.vx', 'World.vx'});
+    vehBus, {'Chassis.Body.CG.vx', 'World.vx'});
 [logsout_vyVeh, speed_y_signal] = getLoggedSignal( ...
-    logsout_VehBus.Values, {'Chassis.Body.CG.vy', 'World.vy'});
+    vehBus, {'Chassis.Body.CG.vy', 'World.vy'});
 [logsout_gxVeh, lng_acc_signal] = getLoggedSignal( ...
-    logsout_VehBus.Values, {'Chassis.Body.CG.gx'});
+    vehBus, {'Chassis.Body.CG.gx'});
 [logsout_gyVeh, lat_acc_signal] = getLoggedSignal( ...
-    logsout_VehBus.Values, {'Chassis.Body.CG.gy'});
+    vehBus, {'Chassis.Body.CG.gy'});
 
 sim_t = getSignalTime(logsout_vxVeh);
 veh_vx = getSignalDataAtTime(logsout_vxVeh, sim_t);
@@ -56,54 +50,8 @@ GGV_data.source.lat_acc = lat_acc_signal;
 GGV_data.source.lng_acc = lng_acc_signal;
 end
 
-function sim_results = getBaseSimulationResults()
-if evalin('base', 'exist(''out'', ''var'')')
-    sim_results = evalin('base', 'out');
-elseif evalin('base', 'exist(''logsout_sm_car'', ''var'')')
-    sim_results = evalin('base', 'logsout_sm_car');
-else
-    error('Simulation output not found. Provide out, logsout_sm_car, or run a simulation first.');
-end
-end
-
 function tf = isNameValueStart(value)
 tf = ischar(value) || (isstring(value) && isscalar(value));
-end
-
-function logsout_sm_car = getLogsoutSmCar(sim_results)
-if isLogsoutDataset(sim_results)
-    logsout_sm_car = sim_results;
-    return
-end
-
-try
-    logsout_sm_car = sim_results.logsout_sm_car;
-    return
-catch
-end
-
-try
-    logsout_sm_car = sim_results.get('logsout_sm_car');
-    return
-catch
-end
-
-try
-    logsout_sm_car = sim_results.get('out.logsout_sm_car');
-    return
-catch
-end
-
-error('Could not find logsout_sm_car in the supplied simulation results.');
-end
-
-function tf = isLogsoutDataset(sim_results)
-try
-    veh_bus = sim_results.get('VehBus');
-    tf = ~isempty(veh_bus);
-catch
-    tf = false;
-end
 end
 
 function [signal, signal_path] = getLoggedSignal(values, candidate_paths)

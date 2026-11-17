@@ -18,13 +18,12 @@ figure(evalin('base',fig_handle_name))
 clf(evalin('base',fig_handle_name))
 temp_colororder = get(gca,'defaultAxesColorOrder');
 
-% Handle single simulation output or logsout directly
-fieldnames_res = sim_results.getElementNames;
-if(find(contains(fieldnames_res,'logsout_sm_car')))
-    logsout_sm_car = sim_results.get('out.logsout_sm_car');
-else
-    logsout_sm_car = sim_results;
+if nargin < 2
+    sim_results = [];
 end
+plotBus = sm_car_plot_data(sim_results);
+drvBus = plotBus.DrvBus;
+vehBus = plotBus.VehBus;
 
 % Check type of maneuver
 fieldlist = fieldnames(Maneuver);
@@ -59,18 +58,16 @@ if(~isempty(hasTrajectory))
     
     % Plot results for systems with a defined trajectory
     % Extract results
-    logsout_VehBus = logsout_sm_car.get('VehBus');
-    logsout_xCar = logsout_VehBus.Values.World.x;
-    logsout_yCar = logsout_VehBus.Values.World.y;
+    logsout_xCar = vehBus.World.x;
+    logsout_yCar = vehBus.World.y;
     
-    logsout_vx   = logsout_VehBus.Values.Chassis.Body.CG.vx;
-    logsout_aYaw = logsout_VehBus.Values.World.aYaw;
+    logsout_vx   = vehBus.Chassis.Body.CG.vx;
+    logsout_aYaw = vehBus.World.aYaw;
     logsout_xBody = [0;cumsum(sqrt((diff(logsout_xCar.Data)).^2+diff(logsout_yCar.Data).^2))];
     
-    logsout_DrvBus = logsout_sm_car.get('DrvBus');
-    logsout_dist   = logsout_DrvBus.Values.Reference.dist;
-    logsout_ref_ayaw = logsout_DrvBus.Values.Reference.ayaw;
-    logsout_ref_vx   = logsout_DrvBus.Values.Reference.vTarget;
+    logsout_dist   = drvBus.Reference.dist;
+    logsout_ref_ayaw = drvBus.Reference.ayaw;
+    logsout_ref_vx   = drvBus.Reference.vTarget;
     
     ayaw_ref = interp1(Maneuver.Trajectory.xTrajectory.Value,Maneuver.Trajectory.aYaw.Value,logsout_dist.Data);
     h4=plot(Maneuver.Trajectory.x.Value,Maneuver.Trajectory.y.Value,'-o','MarkerSize',4,'Color',temp_colororder(4,:));
@@ -196,11 +193,9 @@ if(~isempty(hasTrajectory))
 elseif(~isempty(hasDriveCycle))
     % Plot results for systems with a defined trajectory
     % Extract results
-    logsout_VehBus = logsout_sm_car.get('VehBus');
-    logsout_vx   = logsout_VehBus.Values.Chassis.Body.CG.vx;
+    logsout_vx   = vehBus.Chassis.Body.CG.vx;
     
-    logsout_DrvBus = logsout_sm_car.get('DrvBus');
-    logsout_ref_vx   = logsout_DrvBus.Values.Reference.vTarget;
+    logsout_ref_vx   = drvBus.Reference.vTarget;
 
     plot(logsout_ref_vx.Time,logsout_ref_vx.Data,'-o');
     hold on
@@ -221,14 +216,14 @@ elseif(~isempty(hasDriveCycle))
     legend({'Reference','Measured'},'Location','NorthWest');
 
 elseif(contains(lower(Init_type),'testrig_post'))
+    out = plotBus;
     sm_car_plot5bodymeas
 else
     % Plot Maneuver with Open-Loop Driver Commands
     % Extract simulation results
-    logsout_DrvBus = logsout_sm_car.get('DrvBus');
-    logsout_aSteerWheel = logsout_DrvBus.Values.aSteerWheel*180/pi;
-    logsout_rAccelPedal = logsout_DrvBus.Values.rAccelPedal;
-    logsout_rBrakePedal = logsout_DrvBus.Values.rBrakePedal;
+    logsout_aSteerWheel = drvBus.aSteerWheel*180/pi;
+    logsout_rAccelPedal = drvBus.rAccelPedal;
+    logsout_rBrakePedal = drvBus.rBrakePedal;
     
     ah(1) = subplot(311);
    % plot(Maneuver.Accel.t.Value,Maneuver.Accel.rPedal.Value,'-o','LineWidth',2);

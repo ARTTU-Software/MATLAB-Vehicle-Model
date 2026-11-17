@@ -6,10 +6,7 @@
 %
 % Copyright 2018-2024 The MathWorks, Inc.
 
-% Check for simulation results
-if exist('logsout_sm_car', 'var')
-    error('logsout_sm_car data not available.')
-end
+plotBus = sm_car_plot_data();
 
 
 % Reuse figure if it exists, else create new figure
@@ -23,15 +20,15 @@ clf(h1_sm_car)
 temp_colororder = get(gca,'defaultAxesColorOrder');
 
 % Get simulation results
-logsout_VehBus = out.logsout_sm_car.get('VehBus');
+vehBus = plotBus.VehBus;
 
-logsout_xSteerA1 = logsout_VehBus.Values.Chassis.SuspA1.Steer.xRack;
-logsout_xSteerA2 = logsout_VehBus.Values.Chassis.SuspA2.Steer.xRack;
-logsout_vxVeh = logsout_VehBus.Values.World.vx;
-logsout_vyVeh = logsout_VehBus.Values.World.vy;
+logsout_xSteerA1 = vehBus.Chassis.SuspA1.Steer.xRack;
+logsout_xSteerA2 = vehBus.Chassis.SuspA2.Steer.xRack;
+logsout_vxVeh = vehBus.World.vx;
+logsout_vyVeh = vehBus.World.vy;
 logsout_vxyVeh = sqrt(logsout_vxVeh.Data.^2+logsout_vyVeh.Data.^2);
-logsout_xCar = logsout_VehBus.Values.World.x;
-logsout_yCar = logsout_VehBus.Values.World.y;
+logsout_xCar = vehBus.World.x;
+logsout_yCar = vehBus.World.y;
 
 logsout_px0 = logsout_xCar.Data(1);
 logsout_py0 = logsout_yCar.Data(1);
@@ -119,8 +116,8 @@ if(~strcmpi(trailer_type,'none'))
 end
 text(0.05,0.1,sprintf('Trailer: %s',strrep(trailer_type,'_','\_')),'Units','Normalized','Color',[1 1 1]*0.5);
 
-delvars = setdiff(who('logsout_*'),'logsout_sm_car');
-clear(delvars{:},'delvars');
+clear plotBus vehBus logsout_xSteerA1 logsout_xSteerA2 logsout_vxVeh logsout_vyVeh logsout_vxyVeh
+clear logsout_xCar logsout_yCar logsout_px0 logsout_py0
 
 clear simlog_handles temp_colororder
 

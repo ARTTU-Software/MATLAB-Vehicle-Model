@@ -400,21 +400,14 @@ end
 end
 
 function fig_h = getFigure(fig_name)
-if isstring(fig_name)
-    fig_name = char(fig_name);
-end
-fig_exists = evalin('base', ['exist(''' fig_name ''', ''var'')']);
-if fig_exists
-    fig_is_valid = evalin('base', ...
-        ['isgraphics(' fig_name ', ''figure'')']);
-else
-    fig_is_valid = false;
-end
-
-if fig_is_valid
-    fig_h = evalin('base', fig_name);
-else
+fig_name = char(fig_name);
+figures = findobj(groot,'Type','figure','Name',fig_name);
+if isempty(figures)
     fig_h = figure('Name', fig_name);
+else
+    fig_h = figures(1);
+end
+if isvarname(fig_name)
     assignin('base', fig_name, fig_h);
 end
 end

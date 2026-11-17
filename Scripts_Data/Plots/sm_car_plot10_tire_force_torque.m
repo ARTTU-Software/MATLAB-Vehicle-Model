@@ -1,24 +1,25 @@
-function sm_car_plot10_tire_force_torque(varargin)
+function sm_car_plot10_tire_force_torque(vehicleType,sim_results)
 %sm_car_plot10_tire_force_torque  Plot tire forces and torques for all wheels
-%  sm_car_plot10_tire_force_torque(varargin)
+%  sm_car_plot10_tire_force_torque(vehicleType,sim_results)
 %  You may specify 'vehicle' or 'trailer' to select which data is plotted
 % 
 % Copyright 2018-2024 The MathWorks, Inc.
 
-% Check if vehicle or trailer was specified
-if(nargin == 0 || strcmpi(varargin,'vehicle'))
-    log_fieldname = 'VehBus';
-elseif(strcmpi(varargin,'trailer'))
-    log_fieldname = 'TrlBus'; % Trailer data
-else
-    disp(['Argument ' char(varargin) ' should be ''Vehicle'' or ''Trailer''.'])
-    log_fieldname = 'VehBus';
+if nargin < 2
+    sim_results = [];
 end
-
-% Check for simulation results
-logsout_sm_car = evalin('base','logsout_sm_car');
-if isempty('logsout_sm_car')
-    error('logsout_sm_car data not available.')
+plotBus = sm_car_plot_data(sim_results);
+if nargin < 1 || isempty(vehicleType) || strcmpi(vehicleType,'vehicle')
+    busName = 'VehBus';
+elseif strcmpi(vehicleType,'trailer')
+    busName = 'TrlBus';
+else
+    error('sm_car:InvalidVehicleType','Specify vehicle or trailer.');
+end
+if ~isfield(plotBus,busName) || ~isstruct(plotBus.(busName)) || ...
+        ~isfield(plotBus.(busName),'Chassis')
+    warning('sm_car:MissingTireForces','This run does not contain tire forces for %s.',vehicleType);
+    return
 end
 
 % Reuse figure if it exists, else create new figure
@@ -35,9 +36,9 @@ figure(evalin('base',fig_handle_name))
 clf(evalin('base',fig_handle_name))
 
 % Get simulation results
-logsout_VehBus = logsout_sm_car.get(log_fieldname);
+vehBus = plotBus.(busName);
 
-chassis_log_fieldnames = fieldnames(logsout_VehBus.Values.Chassis);
+chassis_log_fieldnames = fieldnames(vehBus.Chassis);
 whl_inds = find(startsWith(chassis_log_fieldnames,'Whl'));
 whlnames = sort(chassis_log_fieldnames(whl_inds));
 
@@ -49,19 +50,19 @@ for whl_i = 1:length(whl_inds)
     end
     
     ah(1) = subplot(3,2,1);
-    logsout_Fx = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).Fx;
+    logsout_Fx = vehBus.Chassis.(whlnames{whl_i}).Fx;
     hold on
     plot(logsout_Fx.Time, squeeze(logsout_Fx.Data),'LineWidth', 1,'LineStyle',line_style,'DisplayName',whlnames{whl_i})
     title('Fx (N)');
     
     ah(2) = subplot(3,2,3);
-    logsout_Fy = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).Fy;
+    logsout_Fy = vehBus.Chassis.(whlnames{whl_i}).Fy;
     hold on
     plot(logsout_Fy.Time, squeeze(logsout_Fy.Data),'LineWidth', 1,'LineStyle',line_style,'DisplayName',whlnames{whl_i})
     title('Fy (N)');
     
     ah(3) = subplot(3,2,5);
-    logsout_Fz = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).Fz;
+    logsout_Fz = vehBus.Chassis.(whlnames{whl_i}).Fz;
     hold on
     % Squeeze needed for MFeval tire
     plot(logsout_Fz.Time, squeeze(logsout_Fz.Data),'LineWidth', 1,'LineStyle',line_style,'DisplayName',whlnames{whl_i});
@@ -69,19 +70,19 @@ for whl_i = 1:length(whl_inds)
     xlabel('Time (s)')
     
     ah(4) = subplot(3,2,2);
-    logsout_Mx = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).Mx;
+    logsout_Mx = vehBus.Chassis.(whlnames{whl_i}).Mx;
     hold on
     plot(logsout_Mx.Time, squeeze(logsout_Mx.Data),'LineWidth', 1,'LineStyle',line_style,'DisplayName',whlnames{whl_i})
     title('Mx (N*m)');
     
     ah(5) = subplot(3,2,4);
-    logsout_My = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).My;
+    logsout_My = vehBus.Chassis.(whlnames{whl_i}).My;
     hold on
     plot(logsout_My.Time, squeeze(logsout_My.Data),'LineWidth', 1,'LineStyle',line_style,'DisplayName',whlnames{whl_i})
     title('My (N*m)');
     
     ah(6) = subplot(3,2,6);
-    logsout_Mz = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).Mz;
+    logsout_Mz = vehBus.Chassis.(whlnames{whl_i}).Mz;
     hold on
     plot(logsout_Mz.Time, squeeze(logsout_Mz.Data),'LineWidth', 1,'LineStyle',line_style,'DisplayName',whlnames{whl_i})
     title('Mz (N*m)');
@@ -106,7 +107,7 @@ if(isempty(config_str))
 end
 
 maneuver_str = evalin('base','Maneuver.Type');
-if(isempty(config_str))
+if(isempty(maneuver_str))
     maneuver_str = '';
 end
 

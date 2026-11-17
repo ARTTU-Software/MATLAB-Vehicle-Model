@@ -6,10 +6,7 @@
 %
 % Copyright 2018-2024 The MathWorks, Inc.
 
-% Check for simulation results
-if ~exist('logsout_sm_car', 'var')
-    error('logsout_sm_car data not available.')
-end
+plotBus = sm_car_plot_data();
 
 % Reuse figure if it exists, else create new figure
 if ~exist('h2_sm_car', 'var') || ...
@@ -22,22 +19,22 @@ clf(h2_sm_car)
 temp_colororder = get(gca,'defaultAxesColorOrder');
 
 % Get simulation results
-logsout_VehBus = logsout_sm_car.get('VehBus');
+vehBus = plotBus.VehBus;
 
-logsout_vxVeh = logsout_VehBus.Values.World.vx;
-logsout_vyVeh = logsout_VehBus.Values.World.vy;
+logsout_vxVeh = vehBus.World.vx;
+logsout_vyVeh = vehBus.World.vy;
 logsout_sVeh = sqrt(logsout_vxVeh.Data.^2+logsout_vyVeh.Data.^2);
-logsout_xCar = logsout_VehBus.Values.World.x;
-logsout_yCar = logsout_VehBus.Values.World.y;
+logsout_xCar = vehBus.World.x;
+logsout_yCar = vehBus.World.y;
 
 logsout_px0 = logsout_xCar.Data(1);
 logsout_py0 = logsout_yCar.Data(1);
 
 
 % Find wheels
-[tire_radius, tireFields] = sm_car_vehcfg_getTireRadius(Vehicle);
+tire_radius = sm_car_vehcfg_getTireRadius(Vehicle);
 
-chassis_log_fieldnames = fieldnames(logsout_VehBus.Values.Chassis);
+chassis_log_fieldnames = fieldnames(vehBus.Chassis);
 whl_inds = find(startsWith(chassis_log_fieldnames,'Whl'));
 whlnames = sort(chassis_log_fieldnames(whl_inds));
 
@@ -46,8 +43,11 @@ plot(logsout_vxVeh.Time, logsout_sVeh*3.6, 'k--', 'LineWidth', 1,'DisplayName','
 hold on
 
 for whl_i = 1:length(whl_inds)
-    logsout_nWhl = logsout_VehBus.Values.Chassis.(whlnames{whl_i}).n;
-    radius_ind = str2num(whlnames{whl_i}(end));
+    logsout_nWhl = vehBus.Chassis.(whlnames{whl_i}).n;
+    radius_ind = 1;
+    if ~isscalar(tire_radius)
+        radius_ind = str2double(whlnames{whl_i}(end));
+    end
     plot(logsout_nWhl.Time, logsout_nWhl.Data*3.6*tire_radius(radius_ind),'LineWidth', 1,'DisplayName',whlnames{whl_i})
 end
 hold off
@@ -85,7 +85,7 @@ text(0.05,0.1,sprintf('%s\n%s',strrep(config_string,'_','\_'),get_param(bdroot,'
 
 clear tire_variant_name temp_tire_sys
 
-delvars = setdiff(who('logsout_*'),'logsout_sm_car');
-clear(delvars{:},'delvars');
+clear plotBus vehBus logsout_vxVeh logsout_vyVeh logsout_sVeh logsout_nWhl
+clear logsout_xCar logsout_yCar logsout_px0 logsout_py0
 
 clear temp_colororder
