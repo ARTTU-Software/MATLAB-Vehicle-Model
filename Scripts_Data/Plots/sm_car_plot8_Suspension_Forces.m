@@ -3,6 +3,7 @@ function sm_car_plot8_Suspension_Forces(out,Maneuver,~)
 % and is retained for callers that pass the simulation time vector.
 plotBus = sm_car_plot_data(out);
 VehBus = plotBus.VehBus.Chassis;
+rearAxleX = [];
 
 Aarm = {'UpperWishbone', 'LowerWishbone'};
 Axle = {'SuspA1', 'SuspA2'};
@@ -124,8 +125,18 @@ function results = extremaTable(forces, components, comment)
             sampleTimes(row,:) = time(indices).';
 
             corner = VehBus.(force.Axle).(force.Link);
-            upperXYZ(row,:,:) = positionAtForceSamples(corner,'UpperUprightXYZ',time,indices).';
-            lowerXYZ(row,:,:) = positionAtForceSamples(corner,'LowerUprightXYZ',time,indices).';
+            upperPosition = positionAtForceSamples(corner,'UpperUprightXYZ',time,indices);
+            lowerPosition = positionAtForceSamples(corner,'LowerUprightXYZ',time,indices);
+            if strcmp(force.Axle,'SuspA2') && any(isfinite([upperPosition(:,1); lowerPosition(:,1)]))
+                % Rear upright sensors report X relative to the rear axle.
+                if isempty(rearAxleX)
+                    rearAxleX = evalin('base','Vehicle.Chassis.Body.sAxle2.Value(1)');
+                end
+                upperPosition(:,1) = upperPosition(:,1) + rearAxleX;
+                lowerPosition(:,1) = lowerPosition(:,1) + rearAxleX;
+            end
+            upperXYZ(row,:,:) = upperPosition.';
+            lowerXYZ(row,:,:) = lowerPosition.';
         end
         prefixes = ["max","min"] + component;
         axesNames = ["X","Y","Z"];

@@ -4,9 +4,6 @@ clc
 clear
 curr_proj = simulinkproject;
 
-% Load the data types for the root OutBus output.
-fsae_outbus_types();
-
 % Add folders with Simscape Multibody tire subsystem to path
 addpath([curr_proj.RootFolder filesep 'Libraries' filesep 'Vehicle' filesep 'Tire' filesep 'MFMbody' filesep 'MFMbody']);
 
